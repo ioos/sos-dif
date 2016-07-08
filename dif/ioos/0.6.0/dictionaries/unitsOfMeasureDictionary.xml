@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:Dictionary gml:id="UOMDictionary0.3.0" 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:gml="http://www.opengis.net/gml/3.2"
+xmlns:ioos="http://www.noaa.gov/ioos/0.6.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.opengis.net/gml/3.2 ../../../OGC/gml/3.2.1/gml.xsd">
+	<gml:description>Dictionary of IOOS units of measure.</gml:description>
+	<gml:identifier codeSpace="urn:noaa:ioos:def:units">UOMDictionary</gml:identifier>
+	<gml:definitionMember >
+		<gml:UnitDefinition gml:id="psu">
+			<gml:description>Conventional practical salinity units.</gml:description>
+			<gml:identifier codeSpace="http://ndg.nerc.ac.uk/units">practical_salinity_units</gml:identifier>
+			<gml:name>practical salinity units</gml:name>
+			<gml:quantityType>sea water salinity</gml:quantityType>
+			<gml:catalogSymbol codeSpace="http://ndg.nerc.ac.uk/units">psu</gml:catalogSymbol>
+		</gml:UnitDefinition>
+	</gml:definitionMember>
+</gml:Dictionary>

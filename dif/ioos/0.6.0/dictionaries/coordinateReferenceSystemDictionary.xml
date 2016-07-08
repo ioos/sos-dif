@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:Dictionary gml:id="CoordinateReferenceSystemDictionary0.6.0" 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:gml="http://www.opengis.net/gml/3.2"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.opengis.net/gml/3.2 ../../../OGC/gml/3.2.1/gml.xsd">
+	<gml:description>Definitions of Vertical Datum, CoordinateSystem, and CoordinateReferenceSystem</gml:description>
+	<gml:identifier codeSpace="urn:x-noaa:ioos:def">VerticalCRSDictionary</gml:identifier>
+	<gml:dictionaryEntry>
+		<gml:VerticalDatum gml:id="WaterSurfaceAtTimeInstantDatum">
+			<gml:identifier codeSpace="urn:x-nooa:ioos">WaterSurfaceAtTimeInstantDatum</gml:identifier>
+			<gml:scope>Surface waters of the earth with water levels that vary over time.</gml:scope>
+			<gml:anchorDefinition codeSpace="urn:x-nooa:ioos:def">Gravity-related depths below the surface of water whose level varies due to wind, currents, tides, temperature, rain, drought, or other influences, at particular time instants.</gml:anchorDefinition>
+		</gml:VerticalDatum>
+	</gml:dictionaryEntry>
+	<gml:dictionaryEntry>
+		<gml:VerticalCS gml:id="WaterSurfaceAtTimeInstantCS">
+			<gml:identifier codeSpace="urn:x-nooa:ioos:def">WaterSurfaceAtTimeInstantCS</gml:identifier>
+			<gml:axis> 
+				<gml:CoordinateSystemAxis gml:id="depth" uom="m">
+					<gml:identifier codeSpace="urn:x-nooa:ioos:def">depth</gml:identifier>
+					<gml:axisAbbrev>depth</gml:axisAbbrev>
+					<gml:axisDirection codeSpace="urn:ogc:def:axisDirection:OGC:1.0:down">down</gml:axisDirection>
+				</gml:CoordinateSystemAxis>
+			</gml:axis>
+		</gml:VerticalCS>
+	</gml:dictionaryEntry>
+	<gml:dictionaryEntry>
+		<gml:VerticalCRS gml:id="WaterSurfaceAtTimeInstantCRS">
+			<gml:identifier codeSpace="urn:x-nooa:ioos:def">WaterSurfaceAtTimeInstantCRS</gml:identifier>
+			<gml:name codeSpace="urn:x-nooa:ioos:def">urn:x-nooa:ioos:def:crs:WSATI</gml:name>
+			<gml:scope>Surface waters of the earth with water levels that vary over time.</gml:scope>
+			<gml:usesVerticalCS xlink:href="#WaterSurfaceAtTimeInstantCS"/>
+			<gml:verticalDatum xlink:href="#WaterSurfaceAtTimeInstantDatum"/>
+		</gml:VerticalCRS>
+	</gml:dictionaryEntry>
+</gml:Dictionary>

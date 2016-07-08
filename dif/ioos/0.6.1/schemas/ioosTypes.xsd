@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:om="http://www.opengis.net/om/1.0" xmlns:swe="http://www.opengis.net/swe/1.0.2" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:ioos="http://www.noaa.gov/ioos/0.6.1" targetNamespace="http://www.noaa.gov/ioos/0.6.1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0.6.1">
+	<annotation>
+		<documentation>ioosTypes.xsd
+	Geography Markup Language (GML) schema for IOOS data types as OGC Observations and Measurements for use with Open Geospatial Consortium (OGC) Sensor Model Language (SML)  and Sensor Observation Service (SOS).  The types and elements in this schema are generic containers and data value representations.  The schema does not define complex types to structure data records, as that approach was deemed to be too inflexible because it would require schema changes for every record format modification, and entail significant overhead to manage schema versions for multiple SOS.  Instead, record definitions are provided in separate record definition documents that define swe:DataRecord elements that contain swe:field elements to define record structures for instance documents that contain elements defined in this schema.
+	  
+	Object types extend gml:AbstractGMLType to inherit StandardObjectProperties; metadataProperty, description, name, and id. 
+	
+	Elements in the gml:AbstractScalarValue, gml:AbstractScalarValueList, gml:CompositeValue and gml:ValueArray substitution groups defined in the GML valueObjects.xsd schema are used to represent observation conditions and values. 
+	
+	 Elements to represent observation conditions include:
+	StationName, Organization, StationId, SensorId, SamplingRate, ReportingInterval, VerticalDatum, VerticalPosition, ProcessingLevel, Context, CompositeContext, ContextArray.
+	
+	Elements to represent observation values include:
+	Quantity, NamedQuantityList, CompositeValue, ValueArray, ValueArrayOfDefinedComposites.
+
+	Elements to represent either observation conditions or observation values include:
+	Integer, Count, Composite, Array, Text
+	
+	Author:  Paul Daisey, Image Matters LLC, under contract to NOAA.
+	Point of contact: Jeff de La Beaujardiere, NOAA - jeff.deLaBeaujardiere@noaa.gov
+	
+	Current status: beta-test.
+	Revision history: 
+	2008-05-10: version 0.6.0 issued by NOAA IOOS program office.
+	2008-07-31: version 0.6.1 issued with minor amendments and additional documentation.
+	2009-02-16 add epoch attribute to VerticalDatumScalarType
+	2009-04-07 add nillable="true" to ReportingInterval, VerticalPosition, VerticalDatum
+						add nilReason to ReportingIntervalScalarType, VerticalDatumScalarType
+						add nillable="false" to StationId and SensorId
+	References for some of the dictionary entries and enumerations:
+	Q2O v2.1 = QARTODS to OGC Dictionary, v2.1 (2008).
+	NOAA Tidal Datums = http://tidesandcurrents.noaa.gov/datum_options.html.
+	</documentation>
+	</annotation>
+	<import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../../OGC/gml/3.2.1/gml.xsd"/>
+	<import namespace="http://www.opengis.net/om/1.0" schemaLocation="../../../OGC/om/1.0.1/om.xsd"/>
+	<import namespace="http://www.opengis.net/swe/1.0.2" schemaLocation="../../../OGC/sweCommon/1.0.2/swe.xsd"/>
+	<import namespace="http://www.isotc211.org/2005/gmd" schemaLocation="../../../OGC/iso/19139/20070417/gmd/gmd.xsd"/>
+	<element name="WaterBodyFeature" type="ioos:WaterBodyFeatureType" substitutionGroup="gml:AbstractFeature">
+		<annotation>
+			<documentation>A generic water body feature that may be used as the feature of interest of an observation.</documentation>
+		</annotation>
+	</element>
+	<complexType name="WaterBodyFeatureType">
+		<annotation>
+			<documentation>Feature type definition for a generic water body feature that may be used as the feature of interest of an observation. </documentation>
+		</annotation>
+		<complexContent>
+			<extension base="gml:AbstractFeatureType">
+				<sequence>
+					<element name="surface" type="gml:SurfacePropertyType">
+						<annotation>
+							<documentation>Geometry property that represents the horizontal extent of the water body.</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<!-- process parameters and observation conditions definitions  (from Abstract Data Content Standard for IOOS - 2008  v0.2 of 03-11-08) -->
+	<element name="StationName" type="gml:NameOrNilReason" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>Provider-assigned name for this station. Example: "New Dungeness, WA (Hein Bank)". If no name is available, the element should be made nil, with xsi:nil="true" and xsi:nilReason="inapplicable."</documentation>
+		</annotation>
+	</element>
+	<element name="Organization" type="gml:NameOrNilReason" substitutionGroup="gml:AbstractScalarValue" nillable="false">
+		<annotation>
+			<documentation>The name or abbreviation of the organization that operates the station, or that provides the data on behalf of the operator. Example: "NDBC". In the absence of a known dictionary of organization names, the content of this element is left to the operators and providers.It is recommended that this name be brief and be used consistently for all stations. It is suggested that this Organization value be used as the 'authority' portion of StationId and SensorId URNs when appropriate, but if so note that the name must not contain a colon (:) and may only contain these characters in addition to letters and numbers: ()+,-.=@;$_!*' .</documentation>
+		</annotation>
+	</element>
+	<element name="StationId" type="anyURI" substitutionGroup="gml:AbstractScalarValue" nillable="false">
+		<annotation>
+			<documentation>StationId is a unique URN for this station. The scheme follows that defined in OGC document #07-092r1, "Definition identifier URNs in OGC namespace," but for NOAA-assigned URNs it uses the x-noaa namespace (to be replaced by 'noaa' namespace should one be registered with IANA). The URN scheme is urn:namespace:def:objectType:authority:[version:]code where (a) 'urn' and 'def' are fixed strings; (b) 'namespace' is 'x-noaa' in this instance; (c) 'objectType' is 'station' to indicate an observing station; (d) 'authority' is 'ndbc' in this instance and indicates the organization that assigned the Station ID; (e) 'version' is optional and used only if Station ID depends on a particular version of the list of stations registered by this authority; (f) 'code' is an individual station identifier string or number (in this instance a WMO number).</documentation>
+		</annotation>
+	</element>
+	<element name="SensorId" type="anyURI" substitutionGroup="gml:AbstractScalarValue" nillable="false">
+		<annotation>
+			<documentation>SensorId is a unique URN for this sensor on this station. The URN scheme is similar to that for StationId, with objectType=sensor and a string or number identifying this sensor on this station appended after the station code.</documentation>
+		</annotation>
+	</element>
+	<simpleType name="SamplingRateType">
+		<annotation>
+			<documentation>Rate, typically in Hz, at which a sensor measures a particular property. The value must be non-negative.</documentation>
+		</annotation>
+		<restriction base="float">
+			<minInclusive value="0"/>
+			<maxInclusive value="99999999"/>
+		</restriction>
+	</simpleType>
+	<element name="SamplingRate" type="ioos:SamplingRateScalarType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>The frequency at which a sensor makes measurements.</documentation>
+		</annotation>
+	</element>
+	<complexType name="SamplingRateScalarType">
+		<annotation>
+			<documentation>A complex type with simple content extension of SamplingRateType with uom and nilReason attributes.</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="ioos:SamplingRateType">
+				<attribute name="uom" type="gml:UomIdentifier">
+					<annotation>
+						<documentation>Identifier for a unit of measure, either a symbol or anyURI.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="nilReason" type="gml:NilReasonType">
+					<annotation>
+						<documentation>A value from the gml:NilReasonEnumeration or anyURI providing an explanation for a void value or other exception.  See NilReasonType in basicTypes.xsd.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<simpleType name="ReportingIntervalType">
+		<annotation>
+			<documentation>Consistent value of an independent dimension between reported transmission or recording measurement(s). [Source: Q2O v2.1]</documentation>
+		</annotation>
+		<restriction base="float">
+			<minInclusive value="0"/>
+			<maxInclusive value="99999999"/>
+		</restriction>
+	</simpleType>
+	<element name="ReportingInterval" type="ioos:ReportingIntervalScalarType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>The time resolution at which data are reported from this sensor. If the sensor reports data as frequently as it samples, then reportingInterval = 1/samplingRate. Often, however, a sensor aggregates or averages several samples before producing a report over a longer interval.
+			</documentation>
+		</annotation>
+	</element>
+	<complexType name="ReportingIntervalScalarType">
+		<annotation>
+			<documentation>A complex type with simple content extension of ReportingIntervalType with a uom attribute.</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="ioos:ReportingIntervalType">
+				<attribute name="uom" type="gml:UomIdentifier">
+					<annotation>
+						<documentation>Identifier for a unit of measure, either a symbol or anyURI.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="nilReason" type="gml:NilReasonType">
+					<annotation>
+						<documentation>A value from the gml:NilReasonEnumeration or anyURI providing an explanation for a void value or other exception.  See NilReasonType in basicTypes.xsd.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<simpleType name="VerticalDatumType">
+		<annotation>
+			<documentation>An open code list of reference datums for measurements of depth or elevation specified in the closed VerticalDatumEnumeration in this schema or referenced by any URI.</documentation>
+		</annotation>
+		<union memberTypes="ioos:VerticalDatumEnumeration anyURI"/>
+	</simpleType>
+	<simpleType name="VerticalDatumEnumeration">
+		<annotation>
+			<documentation>An enumeration of well-known and frequently used reference datums or measurements of depth or elevation. Entries from the European Petroleum Survey Group (EPSG) database are used whenever possible. Datums are identified by URNs using the OGC scheme for Definition Identifier URNs. The version number of the EPSG database (or other defining database) is omitted here, as indicated by empty '::' component, unless the definition is specific to a particular version.
+			NOTES:
+			(1) The following are 3D geodetic datums, rather than strictly vertical datums: NAD83, WGS84.
+			(2) The following datums are described in NOAA Tidal Datums at http://tidesandcurrents.noaa.gov/datum_options.html; the definition URNs are in the x-noaa namespace as the datums are not defined by EPSG: MLLW, MLW, MTL, DTL, MHHW, MHW.
+			(3) The following are from the NOAA/NGS Vdatum software documentation at http://nauticalcharts.noaa.gov/csdl/Vdatum_data/VDatum106.pdf, and appear to be 3D datums, rather than strictly vertical datums: WGS72, ITRF2000, ITRF97, ITRF96, ITRF94, ITRF93, ITRF92, ITRF91, ITRF90, ITRF89, ITRF88.
+			(4) The following appear in the NGS Vdatum documentation, but do not have EPSG definitions; not sure whether to define NOAA URNs for them, or whether they have external authorities: WGS84(G1150), WGS84(G873), WGS84(G730), SIOMIT92, NEOS90, PNEOS90.</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="urn:ogc:def:datum:epsg::5113">
+				<annotation>
+					<documentation>Local instantaneous sea level.</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::5100">
+				<annotation>
+					<documentation>Mean sea level.</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::5103">
+				<annotation>
+					<documentation>North American Vertical Datum 1988 (NAVD88)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::5102">
+				<annotation>
+					<documentation>National Geodetic Vertical Datum 1929 (NGVD29)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6269">
+				<annotation>
+					<documentation>North American Datum 1983 (NAD83)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6326">
+				<annotation>
+					<documentation>World Geodetic System 1984 (WGS84)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6322">
+				<annotation>
+					<documentation>World Geodetic System 1972 (WGS72)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:x-noaa:def:datum:noaa::MLLW">
+				<annotation>
+					<documentation>Mean Lower Low Water (MLLW)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:x-noaa:def:datum:noaa::MLW">
+				<annotation>
+					<documentation>Mean Low Water (MLW)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:x-noaa:def:datum:noaa::MTL">
+				<annotation>
+					<documentation>Mean Tide Level (MTL)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:x-noaa:def:datum:noaa::DTL">
+				<annotation>
+					<documentation>Diurnal Tide Level (MTL)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:x-noaa:def:datum:noaa::MHW">
+				<annotation>
+					<documentation>Mean High Water (MHW)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:x-noaa:def:datum:noaa::MHHW">
+				<annotation>
+					<documentation>Mean Higher High Water (MHW)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:x-noaa:def:datum:noaa::undefined">
+				<annotation>
+					<documentation>Undefined datum for use only when no other vertical datum is available.</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6647">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 1988 (ITRF88)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6648">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 1989 (ITRF89)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6649">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 1990 (ITRF90)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6650">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 1991 (ITRF91)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6651">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 1992 (ITRF92)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6652">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 1993 (ITRF93)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6653">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 1994 (ITRF94)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6654">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 1996 (ITRF96)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6655">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 1997 (ITRF97)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6656">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 2000 (ITRF2000)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="urn:ogc:def:datum:epsg::6896">
+				<annotation>
+					<documentation>International Terrestrial Reference Frame 2005 (ITRF2005)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="WGS84(G1150)"/>
+			<enumeration value="WGS84(G873)"/>
+			<enumeration value="WGS84(G730)"/>
+			<enumeration value="SIOMIT92"/>
+			<enumeration value="NEOS90"/>
+			<enumeration value="PNEOS90"/>
+		</restriction>
+	</simpleType>
+	<element name="VerticalDatum" type="ioos:VerticalDatumScalarType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>Reference datum for measurements of depth or elevation.</documentation>
+		</annotation>
+	</element>
+	<complexType name="VerticalDatumScalarType">
+		<annotation>
+			<documentation>ComplexType with simpleContent to match content model pattern of existing members of gml:AbstractScalarValue substitution group.</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="ioos:VerticalDatumType">
+				<attribute name="epoch" type="string">
+					<annotation>
+						<documentation>Epoch associated with vertical datum.  For National Tidal Datums, the would be be the start and end of the valid time domain. Using ISO8601 notation for time spans, an example would be "1983/2001."
+GPS uses a single decimal year to denote epoch (e.g., "1984.0").   For more info about tidal datums and epochs, see
+http://tidesandcurrents.noaa.gov/datum_options.html</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="nilReason" type="gml:NilReasonType">
+					<annotation>
+						<documentation>A value from the gml:NilReasonEnumeration or anyURI providing an explanation for a void value or other exception.  See NilReasonType in basicTypes.xsd.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<simpleType name="VerticalPositionType">
+		<annotation>
+			<documentation>Position in meters with respect to VerticalDatum. 
+			NOTE: The restriction comes from Abstract Data Content Standard but is too restrictive.</documentation>
+		</annotation>
+		<restriction base="double">
+			<minInclusive value="-9999.99"/>
+			<maxInclusive value="9999.99"/>
+		</restriction>
+	</simpleType>
+	<element name="VerticalPosition" type="ioos:VerticalPositionScalarType" substitutionGroup="gml:AbstractScalarValue" nillable="true"/>
+	<complexType name="VerticalPositionScalarType">
+		<annotation>
+			<documentation>A complex type with simple content extension of VerticalPositionType with a uom attribute.</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="ioos:VerticalPositionType">
+				<attribute name="uom" type="gml:UomIdentifier">
+					<annotation>
+						<documentation>Identifier for a unit of measure, either a symbol or anyURI.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="nilReason" type="gml:NilReasonType">
+					<annotation>
+						<documentation>A value from the gml:NilReasonEnumeration or anyURI providing an explanation for a void value or other exception.  See NilReasonType in basicTypes.xsd.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<element name="ProcessingLevel" type="ioos:ProcessingLevelType" substitutionGroup="gml:AbstractScalarValue" nillable="true"/>
+	<complexType name="ProcessingLevelType">
+		<annotation>
+			<documentation>ProcessingLevel is a string indicating the status or quality of the measurement. The content of the string value is unconstrained, and could be a label such as "Level 3" or "Final" or the URL of a document describing the processing or QA/QC that has been performed.</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="string">
+				<attribute name="nilReason" type="gml:NilReasonType">
+					<annotation>
+						<documentation>A value from the gml:NilReasonEnumeration or anyURI providing an explanation for a void value or other exception.  See NilReasonType in basicTypes.xsd.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<!-- end process parameters and observation conditions definitions  -->
+	<!-- extensions of types and elements from GML valueObjects.xsd -->
+	<element name="Text" type="ioos:NamedTextType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>Named string specifying some aspect of observation context, for use in CompositeContext.
+			</documentation>
+		</annotation>
+	</element>
+	<complexType name="NamedTextType">
+		<annotation>
+			<documentation>Named string with nilReason</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="string">
+				<attribute name="nilReason" type="gml:NilReasonType">
+					<annotation>
+						<documentation>A value from the gml:NilReasonEnumeration or anyURI providing an explanation for a void value or other exception.  See NilReasonType in basicTypes.xsd.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="name" type="string" use="required"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<element name="Integer" type="ioos:NamedIntegerType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>Potentially negative integer value or parameter.</documentation>
+		</annotation>
+	</element>
+	<complexType name="NamedIntegerType">
+		<annotation>
+			<documentation>Named integer with nilReason</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="integer">
+				<attribute name="nilReason" type="gml:NilReasonType">
+					<annotation>
+						<documentation>A value from the gml:NilReasonEnumeration or anyURI providing an explanation for a void value or other exception.  See NilReasonType in basicTypes.xsd.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="name" type="string" use="required">
+					<annotation>
+						<documentation>Name of the entity the value of this type quantifies.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<element name="Count" type="ioos:NamedNonNegativeIntegerType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>Non-negative count of named entities.  Required before ioos:Array to specify array size.  May also be used as value of a count observation.</documentation>
+		</annotation>
+	</element>
+	<complexType name="NamedNonNegativeIntegerType">
+		<annotation>
+			<documentation>Named integer with nilReason</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="nonNegativeInteger">
+				<attribute name="nilReason" type="gml:NilReasonType">
+					<annotation>
+						<documentation>A value from the gml:NilReasonEnumeration or anyURI providing an explanation for a void value or other exception.  See NilReasonType in basicTypes.xsd.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="name" type="string" use="required">
+					<annotation>
+						<documentation>Name of the entity the value of this type quantifies.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<element name="Quantity" type="ioos:NamedQuantityType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>A double with a name and uom that may be used in gml:valueComponent or gml:valueComponents in gml:CompositeValue in gml:rangeSet in coverage types to represent the value of a phenomenon measurement.</documentation>
+		</annotation>
+	</element>
+	<element name="Context" type="ioos:NamedQuantityType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>A double with a name and uom that may be used in gml:valueComponent or gml:valueComponents in gml:CompositeValue in gml:rangeSet in coverage types to represent the value of a condition associated with the measurement of a phenomenon.</documentation>
+		</annotation>
+	</element>
+	<complexType name="NamedQuantityType">
+		<annotation>
+			<documentation>An extension of gml:MeasureType with nilReason and three name attributes. A uom attribute is required by gml:MeasureType.</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="gml:MeasureType">
+				<attribute name="nilReason" type="gml:NilReasonType">
+					<annotation>
+						<documentation>A value from the gml:NilReasonEnumeration or anyURI providing an explanation for a void value or other exception.  See NilReasonType in basicTypes.xsd.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="name" type="string" use="required"/>
+				<attribute name="standardName" type="string"/>
+				<attribute name="longName" type="string"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<element name="NamedQuantityList" type="ioos:NamedQuantityListType" substitutionGroup="gml:AbstractScalarValueList">
+		<annotation>
+			<documentation>A list of doubles with a name and uom that may be used in gml:valueComponent or gml:valueComponents in gml:CompositeValue in gml:rangeSet in coverage types.</documentation>
+		</annotation>
+	</element>
+	<complexType name="NamedQuantityListType">
+		<annotation>
+			<documentation>An extension of gml:MeaureOrNilReasonListType that adds a name attribute.  A uom attribute is required by gml:MeaureOrNilReasonListType.  The basic type is a list of doubles wherein a value may be replaced by a nilReason.</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="gml:MeasureOrNilReasonListType">
+				<attribute name="name" type="string" use="required"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="CompositePropertyType">
+		<annotation>
+			<documentation>PropertyType for om:result element in ioosObservationSpecializations.xsd that limits the observation result to contain an ioos:Composite.  The result may contain Arrays, but the top level element must always be a Composite to contain a count that matches a swe:Count element in the corresponding swe:DataRecord definition before the Array itself.</documentation>
+		</annotation>
+		<sequence minOccurs="0">
+			<element ref="ioos:Composite"/>
+		</sequence>
+		<attributeGroup ref="gml:AssociationAttributeGroup"/>
+		<attributeGroup ref="gml:OwnershipAttributeGroup"/>
+	</complexType>
+	<element name="Composite" type="ioos:CompositeValueType" substitutionGroup="gml:CompositeValue">
+		<annotation>
+			<documentation>Composite of observation context items and observation values</documentation>
+		</annotation>
+	</element>
+	<element name="CompositeValue" type="ioos:CompositeValueType" substitutionGroup="gml:CompositeValue">
+		<annotation>
+			<documentation>Composite of observation values</documentation>
+		</annotation>
+	</element>
+	<element name="CompositeContext" type="ioos:CompositeValueType" substitutionGroup="gml:CompositeValue">
+		<annotation>
+			<documentation>Composite of observation context items.</documentation>
+		</annotation>
+	</element>
+	<complexType name="CompositeValueType">
+		<annotation>
+			<documentation>A named composite value type with optional name, record definition reference, and process definition reference attributes.  </documentation>
+		</annotation>
+		<complexContent>
+			<extension base="gml:CompositeValueType">
+				<attribute name="name" type="string">
+					<annotation>
+						<documentation>An optional name for the composite if the gml:id is opaque.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="recDef" type="anyURI">
+					<annotation>
+						<documentation>An optional reference to a remote swe:DataRecord that contains sweField elements that contain swe:Quantity elements that may contain swe:uom elements whose contents eliminate the need to use value components with name and uom attributes. The recDef attribute is like the RS attribute on a swe:Record.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="processDef" type="anyURI">
+					<annotation>
+						<documentation>An optional reference to all or part of an observation procedure definition for the value type.  The definition could be referenced  (a) elsewhere in the same instance document (using a relative #reference) or (b) external in another document (using a fully-qualified URL) or (c) be a URN for a standard process, e.g. one use as an argument of an SOS DescribeSensor operation.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+	<element name="Array" type="ioos:ValueArrayType" substitutionGroup="gml:ValueArray">
+		<annotation>
+			<documentation>A value array of Composite.</documentation>
+		</annotation>
+	</element>
+	<element name="ValueArray" type="ioos:ValueArrayType" substitutionGroup="gml:ValueArray">
+		<annotation>
+			<documentation>A value array of CompositeValue.</documentation>
+		</annotation>
+	</element>
+	<element name="ContextArray" type="ioos:ValueArrayType" substitutionGroup="gml:ValueArray">
+		<annotation>
+			<documentation>A value array of CompositeContext</documentation>
+		</annotation>
+	</element>
+	<complexType name="ValueArrayType">
+		<annotation>
+			<documentation>A named typed value array with optional name, record definition reference, and process definition reference attributes. </documentation>
+		</annotation>
+		<complexContent>
+			<extension base="gml:ValueArrayType">
+				<attribute name="name" type="string">
+					<annotation>
+						<documentation>An optional name for the array if the gml:id is opaque.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="recDef" type="anyURI">
+					<annotation>
+						<documentation>An optional reference to a remote swe:DataRecord that contains sweField elements that contain swe:Quantity elements that may contain swe:uom elements whose contents eliminate the need to use value components with name and uom attributes. The recDef attribute is like the RS attribute on a swe:Record.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="processDef" type="anyURI">
+					<annotation>
+						<documentation>An optional reference to all or part of an observation procedure definition for the value type.  The definition could be referenced  (a) elsewhere in the same instance document (using a relative #reference) or (b) external in another document (using a fully-qualified URL) or (c) be a URN for a standard process, e.g. one use as an argument of an SOS DescribeSensor operation.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+	<element name="ValueArrayOfDefinedComposites" type="ioos:ValueArrayType" substitutionGroup="gml:ValueArray">
+		<annotation>
+			<documentation>A value array of composites defined in a GML application schema (e.g. this one) whose record definition is remote.</documentation>
+		</annotation>
+	</element>
+</schema>

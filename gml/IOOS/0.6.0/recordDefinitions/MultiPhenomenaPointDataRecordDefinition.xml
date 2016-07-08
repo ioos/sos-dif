@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<swe:DataRecord 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:gml="http://www.opengis.net/gml/3.2" 
+xmlns:swe="http://www.opengis.net/swe/1.0.2" 
+xmlns:ioos="http://www.noaa.gov/ioos/0.6.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.opengis.net/swe/1.0.2 ../../../OGC/sweCommon/1.0.2/swe.xsd" 
+gml:id="MultiPhenomenaPointDataRecord">
+	<swe:field name="MultiPhenomenaPoint">
+		<swe:DataRecord gml:id="MultiPhenomenaPoint">
+			<swe:field name="ObservationConditions">
+				<swe:DataRecord gml:id="ObservationConditions">
+					<swe:field name="ObservationTime"><swe:Time gml:id="ObservationTime"/></swe:field>
+					<swe:field name="Heading"><swe:Quantity gml:id="Heading"/></swe:field>
+					<swe:field name="Pitch"><swe:Quantity gml:id="Pitch"/></swe:field>
+					<swe:field name="Roll"><swe:Quantity gml:id="Roll"/></swe:field>
+					<swe:field name="Temperature"><swe:Quantity gml:id="Temperature"/></swe:field>
+				</swe:DataRecord>
+			</swe:field>
+			<swe:field name="NumberOfBinObservations">
+				<swe:Count gml:id="NumberOfBinObservations"/>
+			</swe:field>
+			<swe:field name="PointObservations">
+				<swe:DataArray gml:id="PointObservations">
+					<swe:elementCount ref="NumberOfBinObservations"/>
+					<swe:elementType name="BinObs">
+						<swe:DataRecord gml:id="BinObs">
+							<swe:field name="Temperature">
+								<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WaterTemperature" gml:id="TemperatureField">
+									<swe:uom code="C"/>
+								</swe:Quantity>
+							</swe:field>
+							<swe:field name="Salinity">
+								<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#Salinity" gml:id="SalinityField">
+									<swe:uom code="psu"/>
+								</swe:Quantity>
+							</swe:field>
+							<swe:field name="WaterLevel">
+								<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WaterLevel" gml:id="WaterLevelField">
+									<swe:uom code="m"/>
+								</swe:Quantity>
+							</swe:field>
+							<swe:field name="WindSpeed">
+								<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WindSpeed" gml:id="WindSpeedField">
+									<swe:uom code="cm/s"/>
+								</swe:Quantity>
+							</swe:field>
+							<swe:field name="WindDirection">
+								<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WindDirection" gml:id="WindDirectionField">
+									<swe:uom xlink:href="deg"/>
+								</swe:Quantity>
+							</swe:field>
+							<swe:field name="WindVerticalVelocity">
+								<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WindVerticalVelocity" gml:id="WindVerticalVelocityField">
+									<swe:uom xlink:href="cm/s"/>
+								</swe:Quantity>
+							</swe:field>
+							<swe:field name="WindGust">
+								<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WindGust" gml:id="WindGustField">
+									<swe:uom xlink:href="cm/s"/>
+								</swe:Quantity>
+							</swe:field>
+							<swe:field name="CurrentDirection">
+								<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#CurrentDirection" gml:id="CurrentDirectionField">
+									<swe:uom code="deg"/>
+								</swe:Quantity>
+							</swe:field>
+							<swe:field name="CurrentSpeed">
+								<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#CurrentSpeed" gml:id="CurrentSpeedField">
+									<swe:uom xlink:href="cm/s"/>
+								</swe:Quantity>
+							</swe:field>
+							<swe:field name="WavesPoint">
+								<swe:DataRecord gml:id="WavesPoint">
+									<swe:field name="SignificantWaveHeight">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#SignificantWaveHeight" gml:id="SignificantWaveHeightField">
+											<swe:uom xlink:href="m"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="DominantWavePeriod">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#DominantWavePeriod" gml:id="DominantWavePeriodField">
+											<swe:uom xlink:href="s"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="AverageWavePeriod">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#AverageWavePeriod" gml:id="AverageWavePeriodField">
+											<swe:uom xlink:href="s"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="SwellHeight">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#SwellHeight" gml:id="SwellHeightField">
+											<swe:uom xlink:href="m"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="SwellPeriod">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#SwellPeriod" gml:id="SwellPeriodField">
+											<swe:uom xlink:href="s"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="WindWaveHeight">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WindWaveHeight" gml:id="WindWaveHeightField">
+											<swe:uom xlink:href="m"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="WindWavePeriod">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WindWavePeroid" gml:id="WindWavePeriodField">
+											<swe:uom xlink:href="s"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="WaterTemperature">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WaterTemperature" gml:id="WaterTemperatureField">
+											<swe:uom xlink:href="C"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="WaveDuration">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WaveDuration" gml:id="WaveDurationField">
+											<swe:uom xlink:href="s"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="CalculationMethod">
+										<swe:Text gml:id="CalculationMethod"/>
+									</swe:field>
+									<swe:field name="SamplingRate">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#SamplingRate" gml:id="SamplingRateField">
+											<swe:uom xlink:href="s"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="NumberOfFrequencies">
+										<swe:Count gml:id="NumberOfFrequencies"/>
+									</swe:field>
+									<swe:field name="CenterFrequencies">
+										<swe:DataArray gml:id="CenterFrequencies">
+											<swe:elementCount ref="NumberOfFrequencies"/>
+											<swe:elementType name="CenterFrequency">
+												<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#CenterFrequency" gml:id="CenterFrequencyField">
+													<swe:uom xlink:href="Hz"/>
+												</swe:Quantity>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+									<swe:field name="Bandwidths">
+										<swe:DataArray gml:id="Bandwidths">
+											<swe:elementCount ref="NumberOfFrequencies"/>
+											<swe:elementType name="Bandwidth">
+												<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#Bandwidth" gml:id="BandwidthField">
+													<swe:uom xlink:href="Hz"/>
+												</swe:Quantity>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+									<swe:field name="SpectralEnergies">
+										<swe:DataArray gml:id="SpectralEnergies">
+											<swe:elementCount ref="NumberOfFrequencies"/>
+											<swe:elementType name="SpectralEnergy">
+												<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#SpectralEnergy" gml:id="SpectralEnergyField">
+													<swe:uom xlink:href="Hz"/>
+												</swe:Quantity>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+									<swe:field name="MeanWaveDirection">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#MeanWaveDirection" gml:id="MeanWaveDirectionField">
+											<swe:uom xlink:href="deg"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="SwellWaveDirection">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#SwellWaveDirection" gml:id="SwellWaveDirectionField">
+											<swe:uom xlink:href="deg"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="WindWaveDirection">
+										<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#WindWaveDirection" gml:id="WindWaveDirectionField">
+											<swe:uom xlink:href="deg"/>
+										</swe:Quantity>
+									</swe:field>
+									<swe:field name="DirectionalWaveParameters">
+										<swe:DataArray gml:id="DirectionalWaveParameters">
+											<swe:elementCount ref="NumberOfFrequencies"/>
+											<swe:elementType name="DirectionalWaveParameter">
+												<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#DirectionalWaveParameter" gml:id="DirectionalWaveParameterField">
+													<swe:uom xlink:href="Hz"/>
+												</swe:Quantity>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+									<swe:field name="FourierCoefficientA1s">
+										<swe:DataArray gml:id="FourierCoefficientA1s">
+											<swe:elementCount ref="NumberOfFrequencies"/>
+											<swe:elementType name="FourierCoefficientA1">
+												<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#FourierCoefficientA1" gml:id="FourierCoefficientA1Field">
+													<swe:uom xlink:href="Hz"/>
+												</swe:Quantity>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+									<swe:field name="FourierCoefficientA2s">
+										<swe:DataArray gml:id="FourierCoefficientA2s">
+											<swe:elementCount ref="NumberOfFrequencies"/>
+											<swe:elementType name="FourierCoefficientA2">
+												<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#FourierCoefficientA2" gml:id="FourierCoefficientA2Field">
+													<swe:uom xlink:href="Hz"/>
+												</swe:Quantity>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+									<swe:field name="FourierCoefficientB1s">
+										<swe:DataArray gml:id="FourierCoefficientB1s">
+											<swe:elementCount ref="NumberOfFrequencies"/>
+											<swe:elementType name="FourierCoefficientB1">
+												<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#FourierCoefficientB1" gml:id="FourierCoefficientB1Field">
+													<swe:uom xlink:href="Hz"/>
+												</swe:Quantity>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+									<swe:field name="FourierCoefficientB2s">
+										<swe:DataArray gml:id="FourierCoefficientB2s">
+											<swe:elementCount ref="NumberOfFrequencies"/>
+											<swe:elementType name="FourierCoefficientB2">
+												<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.0/dictionaries/phenomenaDictionary.xml#FourierCoefficientB2" gml:id="FourierCoefficientB2Field">
+													<swe:uom xlink:href="Hz"/>
+												</swe:Quantity>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+								</swe:DataRecord>
+							</swe:field>
+						</swe:DataRecord>
+					</swe:elementType>
+				</swe:DataArray>
+			</swe:field>
+		</swe:DataRecord>
+	</swe:field>
+</swe:DataRecord>

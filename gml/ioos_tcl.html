@@ -1,0 +1,904 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1251">
+
+</head>
+
+<body lang=EN-US>
+
+<div class=Section1>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>##############################################################################</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'># ioos.tcl<br>
+#<br>
+# DESCRIPTION<br>
+#   This file contains the routines used to interface to IOOS-DIF XML<br>
+#<br>
+# HISTORY<br>
+# 10/2008 Arthur Taylor (MDL): Created.<br>
+#<br>
+# NOTES<br>
+# 1) For guidance on the IOOS-DIF XML (NOS perspective) see:<br>
+#    http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/<br>
+# 2) I think 'HTTP/GET' is faster than 'HTTP/POST'<br>
+#    XML querries are done in the following procedures:<br>
+#      proc GetActiveNOS {filename} : Uses 'HTTP/GET' method.<br>
+#      proc GetWaterLevel {Text urn}: Uses 'HTTP/GET' method.<br>
+##############################################################################<br>
+<br>
+# The tdom package allows us to parse XML.<br>
+package require tdom<br>
+<br>
+# The http package allows us to interact with http servers.</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>package require
+http 2.0</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>##############################################################################</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#
+PopUp_HTTP_Status() -- Arthur Taylor / MDL</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#<br>
+# PURPOSE<br>
+#   Provides a simple Pop-Up window for informing the user that we are
+doing<br>
+# an HTTP request.<br>
+#<br>
+# ARGUMENTS<br>
+# cmd = Command to perform: open or close window. (Input)<br>
+#<br>
+# RETURNS: void<br>
+#<br>
+# HISTORY<br>
+# 11/2008 Arthur Taylor (MDL): Created.<br>
+#<br>
+# NOTES<br>
+# 1) Take the focus away from main window.<br>
+# 2) May want a USER close/cancel option.<br>
+##############################################################################<br>
+proc PopUp_HTTP_Status {cmd} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  catch {destroy
+.httpStatus}</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  if {$cmd ==
+&quot;close&quot;} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    return</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set tl
+[toplevel .httpStatus]<br>
+  wm title $tl &quot;HTTP Querry Status&quot;<br>
+  set cur2 [frame $tl.txt]<br>
+    Scrolled_Text $cur2 $cur2.text -relief sunken -bd 2 \<br>
+          -wrap none -width 45 -height 25 -setgrid 1 -tabs {20p} \<br>
+          -keepScroll<br>
+  pack $tl.txt -side top -expand yes -fill both<br>
+  return $tl.txt.text<br>
+}<br>
+ &nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>##############################################################################</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'># Print() --
+Arthur Taylor / MDL</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#<br>
+# PURPOSE<br>
+#   Prints some text into a generic text window.<br>
+#<br>
+# ARGUMENTS<br>
+# TextWindow = text window to add text to. (Input)<br>
+#     string = text to add. (Input)<br>
+#  f_newline = True if a new line is desired after the text. (Input)<br>
+#<br>
+# RETURNS: void<br>
+#<br>
+# HISTORY<br>
+# 11/2008 Arthur Taylor (MDL): Created.<br>
+#<br>
+# NOTES<br>
+##############################################################################<br>
+proc Print {TextWindow string {f_newline 1}} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  $TextWindow
+configure -state normal</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  $TextWindow
+insert end $string<br>
+  if {$f_newline} {<br>
+    $TextWindow insert end &quot;\n&quot;<br>
+  }<br>
+  $TextWindow configure -state disabled<br>
+  $TextWindow see end<br>
+  update<br>
+}<br>
+ &nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>##############################################################################</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'># Progress() --
+Arthur Taylor / MDL</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#<br>
+# PURPOSE<br>
+#   Prints a '.' to update the prgress of http transfers.  Sends this
+either<br>
+# to stdout, or to a TextWindow depending on if the user called<br>
+# http::SetProgress.<br>
+#<br>
+# ARGUMENTS<br>
+# TxtWin = For SetProgress: The text window to add '.' to (0 == stdout).
+(In)<br>
+#<br>
+# RETURNS: void<br>
+#<br>
+# HISTORY<br>
+# 11/2008 Arthur Taylor (MDL): Created.<br>
+#<br>
+# NOTES<br>
+##############################################################################<br>
+namespace eval http {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set TextWindow
+0</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  proc
+SetProgress {TxtWin} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    variable
+TextWindow</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    set
+TextWindow $TxtWin</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  proc Progress
+{args} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    variable
+TextWindow<br>
+    if {$TextWindow == 0} {<br>
+      puts -nonewline stderr . ; flush stderr<br>
+    } else {<br>
+      Print $TextWindow &quot;HERE .&quot; 0<br>
+    }<br>
+    update<br>
+  }<br>
+}</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>##############################################################################</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'># GetActiveNOS()
+-- Arthur Taylor / MDL</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#<br>
+# PURPOSE<br>
+#   Request the current active stations from NOS.  Parse the response and<br>
+# store in the provided filename.<br>
+#<br>
+# ARGUMENTS<br>
+# filename = Store the results in this file. (Output)<br>
+#<br>
+# RETURNS: int<br>
+# 1 on error (couldn't load the stations)<br>
+#<br>
+# HISTORY<br>
+# 10/2008 Arthur Taylor (MDL): Created.<br>
+#<br>
+# NOTES<br>
+# 1) Take the focus away from main window.<br>
+# 2) May want a USER close/cancel option.<br>
+# 3) Uses 'HTTP/GET' method.  I think the 'HTTP/GET' is faster than<br>
+#    the 'HTTP/POST' method.<br>
+##############################################################################<br>
+proc GetActiveNOS {filename} {<br>
+  # Set up our active station request</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#  set
+SoapRequest {&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#   
+&lt;sos:GetCapabilities</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#     
+xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#     
+xsi:schemaLocation=&quot;http://schemas.opengis.net/sos/1.0.0/sosAll.xsd&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#     
+xmlns:sos=&quot;http://www.opengis.net/sos/1.0&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#     
+xmlns:gml=&quot;http://www.opengis.net/gml/3.2&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#     
+xmlns:ogc=&quot;http://www.opengis.net/ogc&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#     
+xmlns:om=&quot;http://www.opengis.net/om/1.0&quot; service=&quot;SOS&quot;&gt;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#   
+&lt;/sos:GetCapabilities&gt;}</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#  set URL
+&quot;http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/SOS&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set querry
+[::http::formatQuery service SOS \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>             
+request GetCapabilities]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set URL
+&quot;http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/SOS?$querry&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Get the
+response to our active station request</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set txt
+[PopUp_HTTP_Status open]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  Print $txt
+&quot;sending request for active stations.&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#  Print $txt
+&quot;to: http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/SOS&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  Print $txt
+&quot;to: $URL&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  ::http::SetProgress
+$txt</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#  if {[catch
+{::http::geturl $URL -progress ::http::Progress \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#             
+-query $SoapRequest -headers [list SOAPAction &quot;&quot;]} token]} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#    Print $txt
+&quot;Error Geturl : Message $token&quot;<br>
+#    return 1<br>
+#  }<br>
+  if {[catch {::http::geturl $URL -progress ::http::Progress \<br>
+              -blocksize 8192} token]} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    Print $txt
+&quot;Error Geturl : Message $token&quot;<br>
+    return 1<br>
+  }<br>
+</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  Print $txt
+&quot;&quot;<br>
+  Print $txt &quot;Finished receiving active stations&quot;<br>
+</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'> 
+PopUp_HTTP_Status close</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  ::http::SetProgress
+0</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Parse the
+resulting xml (in $state(body)), and store in $filename</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  upvar #0 $token
+state</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set fp [open
+$filename w]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  puts $fp
+&quot;# NOS Active station ID, URN, Lat, Lon&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set doc [dom
+parse $state(body)]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set root [$doc
+documentElement]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set nodes
+[$root getElementsByTagName ObservationOffering]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  foreach n1
+$nodes {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    foreach
+obsType [$n1 getElementsByTagName observedProperty] {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      set type
+[$obsType getAttribute xlink:href]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      if {$type
+== &quot;urn:ogc:def:property:OGC:waterlevel&quot;} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>        set pos
+[[$n1 getElementsByTagName gml:lowerCorner] text]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>        set urn
+[[$n1 getElementsByTagName gml:name] text]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>        set id
+[lindex [split [$n1 getAttribute gml:id] -] 1]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>        puts $fp
+&quot;$id, $urn, [lindex $pos 0], [lindex $pos 1]&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>        break</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  close $fp</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  return 0</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>}</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>##############################################################################</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#
+slosh_NOS_StationLoad() -- Arthur Taylor / MDL</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#<br>
+# PURPOSE<br>
+#   Load the NOS stations from file.  If the file doesn't exist then call<br>
+# GetActiveNOS to create it and attempt to continue.<br>
+#<br>
+# ARGUMENTS<br>
+# ray_name = Global array of variables. (Input/Output)<br>
+# filename = Read the NOS Statiosn from this file (create if needed)
+(In/Out)<br>
+#<br>
+# RETURNS: int<br>
+# 1 on error (couldn't load the stations)<br>
+#<br>
+# HISTORY<br>
+# 10/2008 Arthur Taylor (MDL): Created.<br>
+#<br>
+# NOTES<br>
+##############################################################################<br>
+proc slosh_NOS_StationLoad {ray_name filename} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  upvar #0
+$ray_name ray</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Attempt to
+make sure $filename exists.</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  if {! [file
+exists $filename]} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    if
+{[GetActiveNOS $filename]} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>     
+tk_messageBox -message &quot;Unable to download the Active stations.&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      return 1</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  if {! [file
+exists $filename]} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    tk_messageBox
+-message &quot;Unable to get the Active stations from \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>                           
+$filename, or online.&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    return 1</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set fp [open
+$filename r]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set
+ray(NOS_StationList) &quot;&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  while {[gets
+$fp line] &gt; 0} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    if {[string
+index $line 0] != &quot;#&quot;} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      lappend
+ray(NOS_StationList) [split $line ,]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  close $fp</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  return 0</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>}</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>##############################################################################</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#
+slosh_NOS_StationDraw() -- Arthur Taylor / MDL</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#<br>
+# PURPOSE<br>
+#   Draw the NOS stations onto the map.  If the stations haven't been
+loaded,<br>
+# it attempts to do so.<br>
+#<br>
+# ARGUMENTS<br>
+# ray_name = Global array of variables. (Input/Output)<br>
+#<br>
+# RETURNS: int<br>
+# 1 on error (couldn't load the stations)<br>
+#<br>
+# HISTORY<br>
+# 10/2008 Arthur Taylor (MDL): Created.<br>
+#<br>
+# NOTES<br>
+##############################################################################<br>
+proc slosh_NOS_StationsDraw {ray_name} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  upvar #0
+$ray_name ray</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Attempt to
+load the Stations List</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  if {! [info
+exists ray(NOS_StationList)]} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    if
+{[slosh_NOS_StationLoad $ray_name \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>         [file
+join $ray(SRC_dir) nosstat.txt]]} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      return 1</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  catch
+{$ray(canv) delete withtag NOS_Stations}</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Get the
+dimmensions of the window.</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set temp
+[halo_ZoomInquire $ray(Zwin)]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set wid [lindex
+$temp 4]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set hei [lindex
+$temp 5]<br>
+</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  foreach elem
+$ray(NOS_StationList) {<br>
+    # Next 2 commands convert from regular lat/lon to screen coordinates</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    set t3
+[halo_ConvertMerc2 $ray(Zwin) 0 [lindex $elem 2] \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>            [expr
+-1 * [lindex $elem 3]]]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    set point
+[halo_ZoomConvert $ray(Zwin) 0 [lindex $t3 0] [lindex $t3 1]]<br>
+    set px [lindex $point 0]<br>
+    set py [lindex $point 1]<br>
+</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    if {($px
+&gt;= 0) &amp;&amp; ($py &gt;= 0) &amp;&amp; ($px &lt; $wid) &amp;&amp; ($py
+&lt; $hei)} {<br>
+      set x1 [expr $px - 2]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      set y1
+[expr $py - 2]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      set x2
+[expr $px + 2]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      set y2
+[expr $py + 2]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>      $ray(canv)
+create rectangle $x1 $y1 $x2 $y2 -fill &quot;orange&quot; \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>            -tags
+&quot;Main NOS_Stations&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  catch
+{$ray(canv) raise noaa NOS_Stations}</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  catch
+{$ray(canv) raise dist_ver NOS_Stations}<br>
+  catch {$ray(canv) raise dist_hor NOS_Stations}<br>
+  return 0<br>
+}</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>##############################################################################</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'># GetWaterLevel()
+-- Arthur Taylor / MDL</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#<br>
+# PURPOSE<br>
+#   Request a time history (from 48 hours before now to now) of the water<br>
+# level from NOS.<br>
+#<br>
+# ARGUMENTS<br>
+# txt = text window to add text to. (Input)<br>
+# urn = 'Uniform Resource Name' for the observation point in question
+(Input)<br>
+#<br>
+# RETURNS: int<br>
+# 1 on http protocol error<br>
+# 2 there was no data<br>
+#<br>
+# HISTORY<br>
+# 10/2008 Arthur Taylor (MDL): Created.<br>
+#<br>
+# NOTES<br>
+# 1) Uses 'HTTP/GET' method.  Don't know if this is faster / slower to<br>
+#    'HTTP/POST' method.<br>
+##############################################################################<br>
+proc GetWaterLevel {txt urn} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Set up our
+querry:</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set now [clock
+seconds]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set nowM48
+[expr $now - 48 * 3600]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set t1 [clock
+format $nowM48 -gmt 1 -format &quot;%Y-%m-%dT%H:%M:%SZ&quot;]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set t2 [clock
+format $now -gmt 1 -format &quot;%Y-%m-%dT%H:%M:%SZ&quot;]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set querry
+[::http::formatQuery service SOS \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>             
+request GetObservation \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>             
+version 1.0.0 \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>             
+observedProperty waterlevel \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>             
+offering $urn \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>             
+responseFormat text/xml\;schema=\&quot;ioos/0.6.1\&quot; \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>             
+eventTime $t1/$t2]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set URL
+&quot;http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/SOS?$querry&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Get the
+response to our querry</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  Print $txt
+&quot;Sending request for water level&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  Print $txt
+&quot;to: $URL&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set StartTime
+[clock milliseconds]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'> 
+::http::SetProgress $txt</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  if {[catch
+{::http::geturl $URL -progress ::http::Progress \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>             
+-blocksize 8192} token]} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    Print $txt
+&quot;Error Geturl : Message $token&quot;<br>
+    return 1<br>
+  }<br>
+</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  Print $txt
+&quot;&quot;<br>
+  Print $txt &quot;Finished receiving response: Took \<br>
+              [expr [clock milliseconds] - $StartTime] milliseconds&quot;<br>
+  ::http::SetProgress 0</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Parse the
+resulting xml (in $state(body))</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  upvar #0 $token
+state</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set doc [dom
+parse $state(body)]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set root [$doc
+documentElement]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Check if
+there is data.</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set pntObs
+[$root selectNodes om:result/ioos:Composite/gml:valueComponents]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  if {$pntObs ==
+&quot;&quot;} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    Print $txt
+&quot;No Data&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    Print $txt
+&quot;$state(body)&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    return 2</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Parse the
+list of observations.</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set path [list
+ioos:Array gml:valueComponents ioos:Composite \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>           
+gml:valueComponents]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set timeSeries
+[$pntObs selectNodes [join $path /]]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set numElem
+[[$timeSeries selectNodes ioos:Count] text]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  Print $txt
+$numElem</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set path [list
+ioos:Array gml:valueComponents ioos:Composite]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set timeList
+[$timeSeries selectNodes [join $path /]]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  if {[llength
+$timeList] != $numElem} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    tk_messageBox
+-message &quot;Error... Count != number of time elements&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  foreach n1
+$timeList {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    set time
+[[$n1 getElementsByTagName gml:timePosition] text]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    set value
+[[$n1 getElementsByTagName ioos:Quantity] text]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    Print $txt
+&quot;$time $value&quot;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  }</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Print the
+station name</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set path [list
+om:procedure om:Process ioos:CompositeContext \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>           
+gml:valueComponents ioos:ContextArray gml:valueComponents \</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>           
+ioos:CompositeContext gml:valueComponents ioos:StationName]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set node [$root
+selectNodes [join $path /]]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  Print $txt
+[$node text]</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  return 0</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>}</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>##############################################################################</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#
+slosh_NOS_Station_Probe() -- Arthur Taylor / MDL</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>#<br>
+# PURPOSE<br>
+#   Shifts into mode where a click will result in a time history of the<br>
+# observations from the nearest NOS station for the last 48 hours.<br>
+#<br>
+# ARGUMENTS<br>
+# ray_name = Global array of variables. (Input/Output)<br>
+#      x y = Screen coordinates the user has clicked on (Input)<br>
+#     flag = 0 (start), 1 (button press in map), 3 (cancel).<br>
+#<br>
+# RETURNS: void<br>
+#<br>
+# HISTORY<br>
+# 10/2008 Arthur Taylor (MDL): Created.<br>
+#<br>
+# NOTES<br>
+# 1) May want to save state of &lt;1&gt; before Start, and reset it in
+Cancel.<br>
+##############################################################################<br>
+proc slosh_NOS_Station_Probe {ray_name x y flag} {</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  upvar #0
+$ray_name ray</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  set c
+$ray(canv)</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Start (Shift
+us into slosh_NOS_Station_Probe mode.</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  if {$flag == 0}
+{</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>    AT_ZoomNone
+$ray_name $x $y 1<br>
+    set ray(mode_cmd) slosh_NOS_Station_Probe<br>
+    # set state [bind $c &lt;1&gt;]<br>
+    bind $c &lt;1&gt; &quot;AT_MidEmu $ray_name 1 \&quot;slosh_NOS_Station_Probe
+\<br>
+                 $ray_name %x %y 1\&quot;&quot;<br>
+    $c configure -cursor fleur<br>
+    set ray(cursor) fleur<br>
+    # Draw the NOS stations if they haven't been drawn yet.<br>
+    if {$ray(f_NOS_Stations) != 1} {<br>
+      set ray(f_NOS_Stations) 1<br>
+      AT_PauseUser $ray(canv) 1<br>
+      slosh_RedrawMain $ray_name 1 0<br>
+      set G_cursor [join &quot;$ray_name (cursor)&quot; &quot;&quot;]<br>
+      AT_PauseUser $ray(canv) $G_cursor<br>
+    }<br>
+    return<br>
+  }<br>
+ &nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Cancel (Shift
+us out of slosh_NOS_Station_Probe mode).</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  if {$flag == 3}
+{<br>
+    # bind $c &lt;1&gt; $state<br>
+    $c configure -cursor arrow<br>
+    set ray(cursor) arrow<br>
+    return<br>
+  }<br>
+ &nbsp;</span></p>
+
+<p class=MsoPlainText><span style='font-family:"Courier New"'>  # Handle a
+button press in the map.<br>
+  if {$flag == 1} {<br>
+    # Find nearest station.  It is possible there is none.<br>
+    set tmp [halo_ZoomConvert $ray(Zwin) 1 [$ray(canv) canvasx $x] \<br>
+             [$ray(canv) canvasy $y]]<br>
+    set temp [halo_ConvertMerc2 $ray(Zwin) 1 [lindex $tmp 0] [lindex $tmp
+1]]<br>
+    set lat1 [lindex $temp 0]<br>
+    set lon1 [expr -1 * [lindex $temp 1]]<br>
+    set minElem &quot;&quot;<br>
+    foreach elem $ray(NOS_StationList) {<br>
+      set lat2 [lindex $elem 2]<br>
+      set lon2 [lindex $elem 3]<br>
+      set d2 [expr ($lat1 - $lat2) * ($lat1 - $lat2) + \<br>
+                   ($lon1 - $lon2) * ($lon1 - $lon2)]<br>
+      if {($minElem == &quot;&quot;) || ($d2 &lt; $minD)} {<br>
+        set minElem $elem<br>
+        set minD $d2<br>
+      }<br>
+    }<br>
+<br>
+    # Pop Up window with IOOS data for that station.<br>
+    catch {destroy .nosLevel}<br>
+    set tl [toplevel .nosLevel]<br>
+    wm title $tl &quot;[lindex $minElem 0] [lindex $minElem 1]&quot;<br>
+    label $tl.lab -text &quot;[lindex $minElem 0] [lindex $minElem
+1]&quot;<br>
+    pack $tl.lab -side top -expand no -fill x<br>
+<br>
+    # Build the graph Frame<br>
+<br>
+<br>
+    # Build the txt Frame<br>
+    set cur2 [frame $tl.txt]<br>
+      Scrolled_Text $cur2 $cur2.text -relief sunken -bd 2 \<br>
+            -wrap none -width 45 -height 25 -setgrid 1 -tabs {20p} \<br>
+            -keepScroll<br>
+    pack $tl.txt -side top -expand yes -fill both<br>
+    GetWaterLevel $tl.txt.text [lindex $minElem 1]<br>
+    return<br>
+  }<br>
+<br>
+  tk_messageBox -message &quot;Invalid flag $flag to
+slosh_NOS_Station_Probe&quot;<br>
+</span><span lang=RU style='font-family:"Courier New"'>}</span></p>
+
+<p class=MsoPlainText><span lang=RU style='font-family:"Courier New"'>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>
+

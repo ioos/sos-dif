@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:gml="http://www.opengis.net/gml/3.2" 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:om="http://www.opengis.net/om/1.0"
+xmlns:swe="http://www.opengis.net/swe/1.0.2" 
+xmlns:gmd="http://www.isotc211.org/2005/gmd"
+xmlns:ioos="http://www.noaa.gov/ioos/0.6.0"
+targetNamespace="http://www.noaa.gov/ioos/0.6.0"
+elementFormDefault="qualified" attributeFormDefault="unqualified" version="0.6.0">
+<annotation>
+	<documentation>
+	Draft Geography Markup Language (GML) schema for IOOS data types as OGC Observations and Measurements for use with  Open Geospatial Consortium (OGC) Sensor Model Language (SML)  and Sensor Observation Service (SOS).
+	  
+	Object types extend gml:AbstractGMLType to inherit StandardObjectProperties; metadataProperty, description, name, and id. 
+	
+Copyright (c) 2008 Image Matters LLC.
+GOVERNMENT PURPOSE RIGHTS LEGEND. This Software is distributed by
+Image Matters LLC for or on behalf of the United States of America, its
+agencies and/or instrumentalities ("U.S. Government"), and is provided with
+Government Purpose Rights. Use, duplication, or disclosure by the U.S.
+Government is subject to restrictions as set forth in DFARS SUBPART
+227.72-RIGHTS IN COMPUTER SOFTWARE AND COMPUTER SOFTWARE DOCUMENTATION
+[252.227.7203-5 subparagraphs (b)]. 
+Manufacturer is Image Matters LLC, 201 Loudoun Street SW, Leesburg, Virginia 20175.
+
+	Author:  Paul Daisey
+	Last Revised: 
+	2008-05-10
+					change ioos:CompositeOrArrayPropertyType to ioos:CompositePropertyType
+	Previous:		
+	2008-05-09
+					add a "../" step to schemaLocation paths to reflect new IOOS-DIF directory structure
+					change version and ioos namespace version to 0.6.0
+					add StationName element
+					add Organization element
+					add PlatformId element
+					add SensorId element
+					add SensorModel element
+					change SampleInterval Type and Element to SamplingRate
+					add ReportingInterval Type and Element
+					change NamedCountType to NamedIntegerType
+					change Count element to NamedIntegerType
+					add Integer element of type NamedIntegerType
+					add WaterBodyFeature Type and Element
+					remove unused definitions
+	2008-05-01
+					add NamedCountType and Count element
+					add processDef attribute to CompositeValueType, ValueArrayType, improve documentation of those types 
+	2008-04-28
+					  restore process parameters definitions
+					  (from Abstract Data Content Standard for IOOS - 2008  v0.2 of 03-11-08)
+					  revise SampleInterval, VerticalDatum, VerticalPosition, ProcessingLevel to be complex types 
+						with simple content, restore lowerCamelCase named elements for ProcessParams
+					  add name attribute to CompositeValueType, ValueArrayType
+	2008-04-09  remove Instrument, Type and Property
+					  remove ProcessParams, Type and Property
+					  remove Measure
+					  remove NamedDouble (use gml:Quantity with uom)
+					  remove NamedCompositeValueType, NamedValueArrayType (use gml:name on base types)
+					  rename sampleInterval SampleInterval, put in substitutionGroup="gml:AbstractScalarValue"
+					  rename verticalDatum VerticalDatum, put in substitutionGroup="gml:AbstractScalarValue"
+					  rename verticalPosition VerticalPosition, put in substitutionGroup="gml:AbstractScalarValue"
+					  rename processingLevel ProcessingLevel, put in substitutionGroup="gml:AbstractScalarValue"
+					  add Text, NamedTextType
+					  rename NamedCondition Context
+					  add Composite
+					  rename NamedTypedCompositeValue CompositeValue
+					  add CompositeContext
+					  add Array
+					  rename NamedValueArray ValueArray
+					  add ContextArray
+	2008-04-08	remove pheonmena-specific schema definitions
+						add NamedCompositeValueType, NamedValueArrayType, 
+						rename ValueArrayNamedCompositeType NamedTypedValueArrayType
+	2008-04-02 add NamedQuantity and NamedQuantityList types and elements  
+	2008-03-20  add IOOSMetaData, WithProcessParams types and elements
+	
+	</documentation>
+</annotation>
+
+<import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../../OGC/gml/3.2.1/gml.xsd"/>
+<import namespace="http://www.opengis.net/om/1.0" schemaLocation="../../../OGC/om/1.0.1/om.xsd"/>
+<import namespace="http://www.opengis.net/swe/1.0.2" schemaLocation="../../../OGC/sweCommon/1.0.2/swe.xsd"/>
+<import namespace="http://www.isotc211.org/2005/gmd" schemaLocation="../../../OGC/iso/19139/20070417/gmd/gmd.xsd"/>
+
+<element name="WaterBodyFeature" type="ioos:WaterBodyFeatureType" substitutionGroup="gml:AbstractFeature"/>
+
+<complexType name="WaterBodyFeatureType">
+	<complexContent>
+		<extension base="gml:AbstractFeatureType">
+			<sequence>
+				<element name="surface" type="gml:SurfacePropertyType"/>
+			</sequence>
+		</extension>
+	</complexContent>
+</complexType>
+
+<element name="IOOSMetaData" type="ioos:IOOSMetaDataType" substitutionGroup="gml:AbstractMetaData" />
+
+<complexType name="IOOSMetaDataType" mixed="true">
+	<annotation>
+		<documentation>Metadata Type for NOAA/IOOS specialized metadata. Includes optional ISO 19139 metadata.</documentation>
+	</annotation>
+	<complexContent>
+		<extension base="gml:AbstractMetaDataType">
+			<sequence>
+				<element ref="gmd:MD_Metadata" minOccurs="0"/>
+				<element name="ioosMetadata" type="string">
+					<annotation>
+						<documentation>This is a placeholder element for IOOS metadata elements to be defined in future work.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</extension>
+	</complexContent>
+</complexType>
+
+<!-- process parameters and observation conditions definitions  (from Abstract Data Content Standard for IOOS - 2008  v0.2 of 03-11-08) -->
+
+
+<element name="StationName" type="gml:NameOrNilReason" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+	<annotation>
+		<documentation>StationName, for use in CompositeContext.</documentation>
+	</annotation>
+</element>
+
+<element name="Organization" type="gml:NameOrNilReason" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+	<annotation>
+		<documentation>Organization name or abbreviation, for use in CompositeContext.</documentation>
+	</annotation>
+</element>
+
+<element name="PlatformId" type="gml:stringOrNilReason" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+	<annotation>
+		<documentation>Platform ID, for use in CompositeContext.</documentation>
+	</annotation>
+</element>
+
+<element name="SensorId" type="gml:stringOrNilReason" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+	<annotation>
+		<documentation>Sensor ID, for use in CompositeContext.</documentation>
+	</annotation>
+</element>
+
+<element name="SensorModel" type="gml:stringOrNilReason" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+	<annotation>
+		<documentation>Sensor Model, for use in CompositeContext.</documentation>
+	</annotation>
+</element>
+
+<element name="SensorNumberOfBeams" type="gml:integerOrNilReason" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+	<annotation>
+		<documentation>Sensor Model, for use in CompositeContext.</documentation>
+	</annotation>
+</element>
+
+<simpleType name="SamplingRateType">
+	<annotation><documentation>in Hz</documentation></annotation>
+	<restriction base="integer">
+		<minInclusive value="0"/>
+		<maxInclusive value="99999999"/>
+	</restriction>
+</simpleType>
+
+<element name="SamplingRate" type="ioos:SamplingRateScalarType" substitutionGroup="gml:AbstractScalarValue"/>
+
+<complexType name="SamplingRateScalarType">
+	<simpleContent>
+		<extension base="ioos:SamplingRateType">
+			<attribute name="uom" type="gml:UomIdentifier"/>
+		</extension>
+	</simpleContent>
+</complexType>
+
+<simpleType name="ReportingIntervalType">
+	<annotation><documentation>in seconds</documentation></annotation>
+	<restriction base="integer">
+		<minInclusive value="0"/>
+		<maxInclusive value="99999999"/>
+	</restriction>
+</simpleType>
+
+<element name="ReportingInterval" type="ioos:ReportingIntervalScalarType" substitutionGroup="gml:AbstractScalarValue"/>
+
+<complexType name="ReportingIntervalScalarType">
+	<simpleContent>
+		<extension base="ioos:ReportingIntervalType">
+			<attribute name="uom" type="gml:UomIdentifier"/>
+		</extension>
+	</simpleContent>
+</complexType>
+
+<element name="verticalDatum" type= "ioos:VerticalDatumType"/>
+
+<simpleType name="VerticalDatumType">
+	<restriction base="string">
+		<enumeration value="NAVD88"/>
+		<enumeration value="NGVD29"/>
+		<enumeration value="MLLW"/>
+		<enumeration value="MLW"/>
+		<enumeration value="LMSL"/>
+		<enumeration value="MTL"/>
+		<enumeration value="DTL"/>
+		<enumeration value="MHW"/>
+		<enumeration value="MHHW"/>
+		<enumeration value="NAD83"/>
+		<enumeration value="WGS84(G1150)"/>
+		<enumeration value="WGS84(G873)"/>
+		<enumeration value="WGS84(G730)"/>
+		<enumeration value="WGS84"/>
+		<enumeration value="WGS72"/>
+		<enumeration value="ITRF2000"/>
+		<enumeration value="ITRF97"/>
+		<enumeration value="ITRF96"/>
+		<enumeration value="ITRF94"/>
+		<enumeration value="ITRF93"/>
+		<enumeration value="ITRF92"/>
+		<enumeration value="ITRF91"/>
+		<enumeration value="ITRF90"/>
+		<enumeration value="ITRF89"/>
+		<enumeration value="ITRF88"/>
+		<enumeration value="SIOMIT92"/>
+		<enumeration value="NEOS90"/>
+		<enumeration value="PNEOS90"/>
+		<enumeration value="Undefined"/>
+	</restriction>
+</simpleType>
+
+<element name="VerticalDatum" type= "ioos:VerticalDatumScalarType" substitutionGroup="gml:AbstractScalarValue"/>
+
+<complexType name="VerticalDatumScalarType">
+	<simpleContent>
+		<extension base="ioos:VerticalDatumType"/>
+	</simpleContent>
+</complexType>
+
+<element name="processingLevel" type="ioos:ProcessingLevelType"/>
+
+<simpleType name="ProcessingLevelType">
+	<union>
+		<simpleType>
+			<restriction base="string">
+				<enumeration value="RAW"/>
+				<enumeration value="FINAL"/>
+				</restriction>
+			</simpleType>
+			<simpleType>
+				<restriction base="string">
+					<pattern value="STAGEd{1,}"/>
+				</restriction>
+			</simpleType>
+	</union>
+</simpleType>
+
+<element name="ProcessingLevel" type="ioos:ProcessingLevelScalarType" substitutionGroup="gml:AbstractScalarValue"/>
+
+<complexType name="ProcessingLevelScalarType">
+	<simpleContent>
+		<extension base="ioos:ProcessingLevelType"/>
+	</simpleContent>
+</complexType>
+
+
+<element name="verticalPosition" type="ioos:VerticalPositionType"/>
+
+<simpleType name="VerticalPositionType">
+	<annotation><documentation>in meters</documentation></annotation>
+	<restriction base="double">
+		<minInclusive value="-9999.99"/>
+		<maxInclusive value="9999.99"/>
+	</restriction>
+</simpleType>
+
+<element name="VerticalPosition" type="ioos:VerticalPositionScalarType" substitutionGroup="gml:AbstractScalarValue"/>
+
+<complexType name="VerticalPositionScalarType">
+	<simpleContent>
+		<extension base="ioos:VerticalPositionType">
+			<attribute name="uom" type="gml:UomIdentifier"/>
+		</extension>
+	</simpleContent>
+</complexType>
+
+
+<!-- end process parameters and observation conditions definitions  -->
+
+<!-- extensions of types and elements from GML valueObjects.xsd -->
+
+
+	<element name="Text" type="ioos:NamedTextType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>Named string specifying some aspect of observation context, for use in CompositeContext.
+			</documentation>
+		</annotation>
+	</element>
+		
+ 	<complexType name="NamedTextType">
+		<annotation>
+			<documentation>Named string with nilReason</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="string">
+				<attribute name="nilReason" type="gml:NilReasonType"/>
+				<attribute name="name" type="string" use="required"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+		
+	<element name="Integer" type="ioos:NamedIntegerType" substitutionGroup="gml:AbstractScalarValue" nillable="true"/>
+	<element name="Count" type="ioos:NamedIntegerType" substitutionGroup="gml:AbstractScalarValue" nillable="true"/>
+	
+	<complexType name="NamedIntegerType">
+		<annotation>
+			<documentation>Named integer with nilReason</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="nonNegativeInteger">
+				<attribute name="nilReason" type="gml:NilReasonType"/>
+				<attribute name="name" type="string" use="required"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+		
+	<element name="Quantity" type="ioos:NamedQuantityType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>A double with a name and uom that may be used in gml:valueComponent or gml:valueComponents in gml:CompositeValue in gml:rangeSet in coverage types to represent the value of a phenomenon measurement.</documentation>
+		</annotation>
+	</element>
+	
+	<element name="Context" type="ioos:NamedQuantityType" substitutionGroup="gml:AbstractScalarValue" nillable="true">
+		<annotation>
+			<documentation>A double with a name and uom that may be used in gml:valueComponent or gml:valueComponents in gml:CompositeValue in gml:rangeSet in coverage types to represent the value of a condition associated with the measurement of a phenomenon.</documentation>
+		</annotation>
+	</element>
+	
+ 	<complexType name="NamedQuantityType">
+		<annotation>
+			<documentation>A uom attribute is required by gml:MeasureType.</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="gml:MeasureType">
+				<attribute name="nilReason" type="gml:NilReasonType"/>
+				<attribute name="name" type="string" use="required"/>
+				<attribute name="standardName" type="string"/>
+				<attribute name="longName" type="string"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+	<element name="NamedQuantityList" type="ioos:NamedQuantityListType" substitutionGroup="gml:AbstractScalarValueList">
+		<annotation>
+			<documentation>A list of doubles with a name and uom that may be used in gml:valueComponent or gml:valueComponents in gml:CompositeValue in gml:rangeSet in coverage types.</documentation>
+		</annotation>
+	</element>
+	
+	<complexType name="NamedQuantityListType">
+		<simpleContent>
+			<extension base="gml:MeasureOrNilReasonListType">
+				<attribute name="name" type="string" use="required"/>			
+			</extension>
+		</simpleContent>
+	</complexType>
+
+
+	<complexType name="CompositePropertyType">
+		<annotation>
+			<documentation>PropertyType for om:result element in ioosObservationSpecializations.xsd that limits the observation result to contain an ioos:Composite.  The result may contain Arrays, but the top level element must always be a Composite to contain a count that matches a swe:Count element in the corresponding swe:DataRecord definition before the Array itself.</documentation>
+		</annotation>
+		<sequence minOccurs="0">
+			<element ref="ioos:Composite"/>
+		</sequence>
+		<attributeGroup ref="gml:AssociationAttributeGroup"/>
+		<attributeGroup ref="gml:OwnershipAttributeGroup"/>
+	</complexType>
+
+
+	<element name="Composite" type="ioos:CompositeValueType" substitutionGroup="gml:CompositeValue">
+		<annotation>
+			<documentation>Composite of observation context and observaton values</documentation>
+		</annotation>
+	</element>
+	
+	<element name="CompositeValue" type="ioos:CompositeValueType" substitutionGroup="gml:CompositeValue">
+		<annotation>
+			<documentation>Composite of observation values</documentation>
+		</annotation>
+	</element>
+
+	<element name="CompositeContext" type="ioos:CompositeValueType" substitutionGroup="gml:CompositeValue">
+		<annotation>
+			<documentation>Composite of observation values</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="CompositeValueType">
+		<annotation>
+			<documentation>A named composite value type with optional name, record definition reference, and process definition reference attributes.  </documentation>
+		</annotation>
+		<complexContent>
+			<extension base="gml:CompositeValueType">
+				<attribute name="name" type="string" >
+					<annotation>
+						<documentation>An optional name for the composite if the gml:id is opaque.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="recDef" type="anyURI">
+					<annotation>
+						<documentation>An optional reference to a remote swe:DataRecord that contains sweField elements that contain swe:Quantity elements that may contain swe:uom elements whose contents eliminate the need to use value components with name and uom attributes. The recDef attribute is like the RS attribute on a swe:Record.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="processDef" type="anyURI">
+					<annotation>
+						<documentation>An optional reference to all or part of a observation procedure definition for the value type.</documentation>
+					</annotation>
+				</attribute>
+			</extension>		
+		</complexContent>
+	</complexType>
+
+
+	<element name="Array" type="ioos:ValueArrayType" substitutionGroup="gml:ValueArray">
+		<annotation>
+			<documentation>A value array of Composite.</documentation>
+		</annotation>
+	</element>
+	
+	<element name="ValueArray" type="ioos:ValueArrayType" substitutionGroup="gml:ValueArray">
+		<annotation>
+			<documentation>A value array of CompositeValue.</documentation>
+		</annotation>
+	</element>
+	
+	<element name="ContextArray" type="ioos:ValueArrayType" substitutionGroup="gml:ValueArray">
+		<annotation>
+			<documentation>A value array of CompositeContext</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="ValueArrayType">
+		<annotation>
+				<documentation>A named typed value array with optional name, record definition reference, and process definition reference attributes. </documentation>
+		</annotation>
+		<complexContent>
+			<extension base="gml:ValueArrayType">
+				<attribute name="name" type="string" >
+					<annotation>
+						<documentation>An optional name for the array if the gml:id is opaque.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="recDef" type="anyURI">
+					<annotation>
+						<documentation>An optional reference to a remote swe:DataRecord that contains sweField elements that contain swe:Quantity elements that may contain swe:uom elements whose contents eliminate the need to use value components with name and uom attributes. The recDef attribute is like the RS attribute on a swe:Record.</documentation>
+					</annotation>
+				</attribute>
+				<attribute name="processDef" type="anyURI">
+					<annotation>
+						<documentation>An optional reference to all or part of a observation procedure definition for the value array type.</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<element name="ValueArrayOfDefinedComposites" type="ioos:ValueArrayType" substitutionGroup="gml:ValueArray">
+		<annotation>
+			<documentation>A value array of composites defined in a GML application schema (e.g. this one) whose record definition is remote.</documentation>
+		</annotation>
+	</element>
+
+  
+</schema>
+

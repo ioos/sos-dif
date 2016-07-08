@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:om="http://www.opengis.net/om/1.0" xmlns:swe="http://www.opengis.net/swe/1.0.2" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:ioos="http://www.noaa.gov/ioos/0.6.1" targetNamespace="http://www.opengis.net/om/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0.0">
+	<annotation>
+		<documentation>ioosObservationSpecializations.xsd
+
+An implementation of the OandM model for NOAA IOOS derived from observationSpecialization_override.xsd.
+
+This document contains various specializations of the basic observation pattern, by fixing the type of the result. 
+In this version, the specialization is achieved by restricting om:ObservationType to have a result of the correct type
+
+	Author:  Paul Daisey, Image Matters LLC, under contract to NOAA.
+	Point of contact: Jeff de La Beaujardiere, NOAA - jeff.deLaBeaujardiere@noaa.gov
+	
+	Current status: beta-test.
+	Revision history: 
+	2008-05-10: version 0.6.0 issued by NOAA IOOS program office.
+	2008-07-25: version 0.6.1 issued with minor amendments and additional documentation.
+</documentation>
+	</annotation>
+	<!-- ====================================================================== -->
+	<!-- bring in other schemas -->
+	<include schemaLocation="../../../OGC/om/1.0.1/om.xsd"/>
+	<import namespace="http://www.noaa.gov/ioos/0.6.1" schemaLocation="./ioosTypes.xsd"/>
+	<import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../../OGC/gml/3.2.1/gml.xsd"/>
+	<import namespace="http://www.opengis.net/swe/1.0.2" schemaLocation="../../../OGC/sweCommon/1.0.2/swe.xsd"/>
+	<import namespace="http://www.isotc211.org/2005/gmd" schemaLocation="../../../OGC/iso/19139/20070417/gmd/gmd.xsd"/>
+	<!-- ====================================================================== -->
+	<!-- == Observation with constant complex result encoded in a gml:Array or gml:CompositeValue  == -->
+	<!-- ====================================================================== -->
+	<complexType name="CompositeObservationType">
+		<annotation>
+			<documentation>A specialized Observation derived by restriction from om:ObservationType, in which the result is constrained to be an ioos:CompositePropertyType containing an ioos:Composite.  Schema annotation and documentation for elements in this type replicated here from the source schemas for reader convenience are so noted.</documentation>
+		</annotation>
+		<complexContent>
+			<restriction base="om:ObservationType">
+				<sequence>
+					<element ref="gml:metaDataProperty" minOccurs="0" maxOccurs="unbounded">
+						<annotation>
+							<documentation>This element provides a reference to an external metadata file via an xlink:href attribute. The number of gml:metaDataProperty elements is unbounded. The format and schema of the external metadata file is unconstrained (cf. observationMetadata below). The presence and location of this element is defined by GML (in gmlBase.xsd).</documentation>
+						</annotation>
+					</element>
+					<element ref="gml:description" minOccurs="0">
+						<annotation>
+							<documentation>The value of this property is a text description of the object. (from gmlBase.xsd)</documentation>
+						</annotation>
+					</element>
+					<element ref="gml:name" minOccurs="0" maxOccurs="unbounded">
+						<annotation>
+							<documentation>The gml:name property provides a label or identifier for the object, commonly a descriptive name. An object may have several names, typically assigned by different authorities. gml:name uses the gml:CodeType content model.  The authority for a name is indicated by the value of its (optional) codeSpace attribute.  The name may or may not be unique, as determined by the rules of the organization responsible for the codeSpace.  In common usage there will be one name per authority, so a processing application may select the name from its preferred codeSpace. (from gmlBase.xsd)</documentation>
+						</annotation>
+					</element>
+					<element ref="gml:boundedBy" minOccurs="0">
+						<annotation>
+							<documentation>This property describes the minimum bounding box or rectangle that encloses the entire feature. (from feature.xsd)</documentation>
+						</annotation>
+					</element>
+					<element name="observationMetadata" type="gmd:MD_Metadata_PropertyType" minOccurs="0">
+						<annotation>
+							<documentation>This element allows a reference to an ISO 19139 metadata entity (cf. gml:metaDataProperty above).  Only 0 or 1 observationMetadata elements are permitted. The presence and location of this element are defined by OGC Obs and Meas (in observation.xsd)</documentation>
+						</annotation>
+					</element>
+					<element name="samplingTime" type="swe:TimeObjectPropertyType">
+						<annotation>
+							<documentation>The samplingTime is the time that the result applies to the feature-of-interest. 
+					This is the time usually required for geospatial analysis of the result. (from observation.xsd)</documentation>
+						</annotation>
+					</element>
+					<element name="resultTime" type="swe:TimeObjectPropertyType" minOccurs="0">
+						<annotation>
+							<documentation>The resultTime is the time when the procedure associated with the observation act was applied. 
+					For some observations this is identical to samplingTime, in which case the resultTime may be omitted. 
+					
+					Example: 	Where a measurement is made on a specimen in a laboratory, the samplingTime should record the time the specimen was retrieved from its host, while the resultTime should record the time the laboratory procedure was applied. 
+					Example: 	Where sensor observation results are post-processed, the resultTime is the post-processing time, while the samplingTime preserves the time of initial interaction with the world. 
+					Example: 	Simulations are often used to estimate the values for phenomena in the future or past. The samplingTime is the real-world time that the result applies to, while the resultTime is the time that the simulation process was executed.  (from observation.xsd)</documentation>
+						</annotation>
+					</element>
+					<element name="procedure" type="om:ProcessPropertyType">
+						<annotation>
+							<documentation>The procedure is the description of a process used to generate the result. 
+							It must be suitable for the observed property.  
+							NOTE: 	At this level we do not distinguish between sensor-observations, 
+							estimations made by an observer, or algorithms, simulations, computations and complex processing chains.
+							(from observation.xsd) </documentation>
+						</annotation>
+					</element>
+					<element name="resultQuality" type="gmd:DQ_Element_PropertyType" minOccurs="0">
+						<annotation>
+							<documentation>A reference to ISO Metadata entity. (from observation.xsd)</documentation>
+						</annotation>
+					</element>
+					<element name="observedProperty" type="swe:PhenomenonPropertyType">
+						<annotation>
+							<documentation>Property-type or phenomenon for which the observation result provides an estimate of its value. 
+							for example "wavelength", "grass-species", "power", "intensity in the waveband x-y", etc. 
+							It must be a property associated with the type of the feature of interest. 
+							This feature-property that provides the (semantic) type of the observation. 
+							The description of the phenomenon may be quite specific and constrained. 
+
+							The description of the property-type may be presented using various alternative encodings. 
+							If shown inline, the swe:Phenomenon schema is required. 
+							If provided using another encoding (e.g. OWL or SWEET) then the description must be in a remote repository 
+							and xlink reference used. </documentation>
+						</annotation>
+					</element>
+					<element name="featureOfInterest" type="gml:FeaturePropertyType">
+						<annotation>
+							<documentation>The featureOfInterest is a feature of any type (ISO 19109, ISO 19101), 
+							which is a representation of the observation target, being the real-world object regarding which the 
+							observation is made, such as a specimen, station, tract, mountain, pixel, etc. 
+							The spatial properties (location) of this feature of interest are typically of most interest for spatial analysis 
+							of the observation result.   (from observation.xsd)</documentation>
+						</annotation>
+					</element>
+					<element name="parameter" type="swe:AnyDataPropertyType" minOccurs="0" maxOccurs="unbounded">
+						<annotation>
+							<documentation>An Observation parameter is a general event-specific parameter. 
+							This will typically be used to record environmental parameters, or event-specific sampling parameters 
+							that are not tightly bound to either the feature-of-interest or the procedure. 
+							NOTE: 	Parameters that are tightly bound to the procedure should be recorded as part of the procedure description. 
+							For example, the SensorML model associates parameters with specific process elements or stages. 
+							NOTE: 	The semantics of the parameter must be provided as part of its value. 
+							In some applications it is convenient to use a generic or standard procedure, or feature-of-interest, rather than define 
+							an event-specific process or feature. In this context, event-specific parameters are bound to the Observation act.
+							 (from observation.xsd)</documentation>
+						</annotation>
+					</element>
+					<element name="result" type="ioos:CompositePropertyType">
+						<annotation>
+							<documentation>The result contains the value generated by the procedure. 
+							The type of the observation result must be consistent with the observed property, 
+							and the scale or scope for the value must be consistent with the quantity or category type. 
+							Application profiles may choose to constrain the type of the result. (from observation.xsd)  
+							The element defined here constrains the property to refer to or contain an ioos:Composite 
+							(defined in ioosTypes.xsd),  which may in turn contain a count and an Array.
+							</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</restriction>
+		</complexContent>
+	</complexType>
+	<!-- ...................... -->
+	<element name="CompositeObservation" type="om:CompositeObservationType" substitutionGroup="om:Observation">
+		<annotation>
+			<documentation>Specialized Observation, in which the result is an ioos:CompositePropertyType containing an ioos:Composite.</documentation>
+		</annotation>
+	</element>
+	<!-- ====================================================================== -->
+</schema>

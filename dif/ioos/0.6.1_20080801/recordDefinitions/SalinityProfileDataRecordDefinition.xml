@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<swe:DataRecord 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:gml="http://www.opengis.net/gml/3.2" 
+xmlns:swe="http://www.opengis.net/swe/1.0.2" 
+xmlns:ioos="http://www.noaa.gov/ioos/0.6.1" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.opengis.net/swe/1.0.2 ../../../OGC/sweCommon/1.0.2/swe.xsd" 
+gml:id="SalinityVerticalProfileCollectionTimeSeriesDataRecord">
+<!-- record definition for observation result of salinityProfile.xml, salinityProfileCollection.xml, salinityProfileTimeseries.xml, salinityProfileCollectionTimeSeries.xml -->
+	<swe:field name="NumberOfObservationPoints">
+		<swe:Count gml:id="NumberOfObservationPoints"/>
+	</swe:field>
+	<swe:field name="SalinityVerticalProfileCollectionTimeSeries">
+		<swe:DataArray gml:id="SalinityVerticalProfileCollectionTimeSeries">
+			<swe:elementCount ref="NumberOfObservationPoints"/><!-- swe:DataArray required reference to swe:Count above -->
+			<swe:elementType name="StationTimeSeriesRecord">
+				<swe:DataRecord gml:id="StationTimeSeriesRecord">
+					<swe:field name="NumberOfObservationTimes">
+						<swe:Count gml:id="NumberOfObservationTimes"/>
+					</swe:field>
+					<swe:field name="">
+						<swe:DataArray gml:id="StationSalinityProfileTimeSeries">
+							<swe:elementCount ref="NumberOfObservationTimes"/><!-- swe:DataArray required reference to swe:Count above -->
+							<swe:elementType name="StationProfile">
+								<swe:DataRecord gml:id="StationProfile">
+									<swe:field name="ObservationConditions">
+										<swe:DataRecord gml:id="ObservationConditions">
+											<swe:field name="ObservationTime"><swe:Time gml:id="ObservationTime"/></swe:field>
+											<!-- Any time-dependent metadata about this observation would go here as a sequence of swe:field elements -->
+										</swe:DataRecord>
+									</swe:field>
+									<swe:field name="NumberOfBinObservations">
+										<swe:Count gml:id="NumberOfBinObservations"/>
+									</swe:field>
+									<swe:field name="StationProfileObservations">
+										<swe:DataArray gml:id="StationProfileObservations">
+											<swe:elementCount ref="NumberOfBinObservations"/><!-- swe:DataArray required reference to swe:Count above -->
+											<swe:elementType name="BinObs">
+												<swe:DataRecord gml:id="BinObs">
+													<swe:field name="Salinity">
+														<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.1/dictionaries/phenomenaDictionary.xml#Salinity" gml:id="SalinityField">
+															<swe:uom code="psu"/>
+															</swe:Quantity>
+													</swe:field>		
+												</swe:DataRecord>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+								</swe:DataRecord>
+							</swe:elementType>
+						</swe:DataArray>
+					</swe:field>
+				</swe:DataRecord>
+			</swe:elementType>
+		</swe:DataArray>
+	</swe:field>
+</swe:DataRecord>

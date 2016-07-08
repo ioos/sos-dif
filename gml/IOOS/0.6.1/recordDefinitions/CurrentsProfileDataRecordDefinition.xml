@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<swe:DataRecord 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:gml="http://www.opengis.net/gml/3.2" 
+xmlns:swe="http://www.opengis.net/swe/1.0.2" 
+xmlns:ioos="http://www.noaa.gov/ioos/0.6.1" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.opengis.net/swe/1.0.2 ../../../OGC/sweCommon/1.0.2/swe.xsd" 
+gml:id="CurrentsVerticalProfileCollectionTimeSeriesDataRecord">
+<!-- record definition for observation result of currentsProfile.xml, currentsProfileCollection.xml, currentsProfileTimeseries.xml, currentsProfileCollectionTimeSeries.xml -->
+	<swe:field name="NumberOfObservationPoints">
+		<swe:Count gml:id="NumberOfObservationPoints"/>
+	</swe:field>
+	<swe:field name="CurrentsVerticalProfileCollectionTimeSeries">
+		<swe:DataArray gml:id="CurrentsVerticalProfileCollectionTimeSeries">
+			<swe:elementCount ref="NumberOfObservationPoints"/><!-- swe:DataArray required reference to swe:Count above -->
+			<swe:elementType name="StationTimeSeriesRecord">
+				<swe:DataRecord gml:id="StationTimeSeriesRecord">
+					<swe:field name="NumberOfObservationTimes">
+						<swe:Count gml:id="NumberOfObservationTimes"/>
+					</swe:field>
+					<swe:field name="">
+						<swe:DataArray gml:id="StationCurrentsProfileTimeSeries">
+							<swe:elementCount ref="NumberOfObservationTimes"/><!-- swe:DataArray required reference to swe:Count above -->
+							<swe:elementType name="StationProfile">
+								<swe:DataRecord gml:id="StationProfile">
+									<swe:field name="ObservationConditions">
+										<swe:DataRecord gml:id="ObservationConditions">
+											<swe:field name="ObservationTime"><swe:Time gml:id="ObservationTime"/></swe:field>
+											<!-- Any time-dependent metadata about this observation would go here as a sequence of swe:field elements -->
+											<swe:field name="Heading"><swe:Quantity gml:id="Heading"/></swe:field>
+											<swe:field name="Pitch"><swe:Quantity gml:id="Pitch"/></swe:field>
+											<swe:field name="Roll"><swe:Quantity gml:id="Roll"/></swe:field>
+											<swe:field name="WaterTemperature"><swe:Quantity gml:id="WaterTemperature"/></swe:field>
+										</swe:DataRecord>
+									</swe:field>
+									<swe:field name="NumberOfBinObservations">
+										<swe:Count gml:id="NumberOfBinObservations"/>
+									</swe:field>
+									<swe:field name="StationProfileObservations">
+										<swe:DataArray gml:id="StationProfileObservations">
+											<swe:elementCount ref="NumberOfBinObservations"/><!-- swe:DataArray required reference to swe:Count above -->
+											<swe:elementType name="BinObs">
+												<swe:DataRecord gml:id="BinObs">
+													<swe:field name="CurrentDirection">
+														<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.1/dictionaries/phenomenaDictionary.xml#CurrentDirection" gml:id="CurrentDirectionField">
+															<swe:uom code="deg"/>
+														</swe:Quantity>
+													</swe:field>
+													<swe:field name="CurrentSpeed">
+														<swe:Quantity definition="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.1/dictionaries/phenomenaDictionary.xml#CurrentSpeed" gml:id="CurrentSpeedField">
+															<swe:uom xlink:href="cm/s"/>
+														</swe:Quantity>
+													</swe:field>
+												</swe:DataRecord>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+								</swe:DataRecord>
+							</swe:elementType>
+						</swe:DataArray>
+					</swe:field>
+				</swe:DataRecord>
+			</swe:elementType>
+		</swe:DataArray>
+	</swe:field>
+</swe:DataRecord>

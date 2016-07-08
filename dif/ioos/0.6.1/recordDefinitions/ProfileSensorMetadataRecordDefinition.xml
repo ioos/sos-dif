@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<swe:DataRecord 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:gml="http://www.opengis.net/gml/3.2" 
+xmlns:swe="http://www.opengis.net/swe/1.0.2" 
+xmlns:ioos="http://www.noaa.gov/ioos/0.6.1" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.opengis.net/swe/1.0.2 ../../../OGC/sweCommon/1.0.2/swe.xsd" 
+gml:id="ProfileSensorMetadataRecord">
+<gml:description>Data record definition for observations by Profile sensors (upward, downward or side-looking). NOTE: This record definition is XML using SWE elements; it is not XML schema. There is no method for stating that some fields are optional rather than mandatory. Guidance from IOOS indicating which elements are mandatory is pending.</gml:description>
+	<swe:field name="NumberOfStations">
+		<swe:Count gml:id="NumberOfStations"/>
+	</swe:field>
+	<swe:field name="StationArray">
+		<swe:DataArray gml:id="StationArrayRecord">
+			<swe:elementCount ref="NumberOfStations"/><!-- swe:DataArray required reference to swe:Count above -->
+			<swe:elementType name="Station">
+				<swe:DataRecord gml:id="StationInfoRecord">
+					<swe:field name="StationName"><swe:Text gml:id="StationName"/></swe:field>
+					<swe:field name="Organization"><swe:Text gml:id="Organization"/></swe:field>
+					<swe:field name="StationId"><swe:Text gml:id="StationId"/></swe:field>
+					<swe:field name="LatLon"><swe:Position gml:id="LatLon"/></swe:field>
+					<swe:field name="VerticalDatum"><swe:Text gml:id="VerticalDatum" definition="../dictionaries/parameterDictionary.xml#VerticalDatum"/></swe:field>
+					<swe:field name="VerticalPosition"><swe:Quantity gml:id="VerticalPosition" definition="../dictionaries/parameterDictionary.xml#VerticalPosition"/></swe:field>
+					<swe:field name="TotalWaterDepth"><swe:Quantity gml:id="TotalWaterDepth"/></swe:field>
+					<swe:field name="NumberOfSensors"><swe:Count gml:id="NumberOfSensors"/></swe:field>
+					<swe:field name="SensorArray">
+						<swe:DataArray gml:id="SensorArray">
+							<swe:elementCount ref="NumberOfSensors"/><!-- swe:DataArray required reference to swe:Count above -->
+							<swe:elementType name="Sensor">
+								<swe:DataRecord gml:id="StationSensorInfo">
+									<swe:field name="SensorId"><swe:Text gml:id="SensorId"/></swe:field>
+									<swe:field name="Orientation"><swe:Text gml:id="Orientation"/></swe:field>
+									<swe:field name="SensorDepth"><swe:Quantity gml:id="SensorDepth"/></swe:field>
+									<swe:field name="SamplingRate"><swe:Count gml:id="SamplingRate"/></swe:field>
+									<swe:field name="ReportingInterval"><swe:Count gml:id="ReportingInterval"/></swe:field>
+									<swe:field name="ProcessingLevel"><swe:Text gml:id="ProcessingLevel"/></swe:field>
+									<swe:field name="BinSize"><swe:Quantity gml:id="BinSize"/></swe:field>
+									<swe:field name="FirstBinCenter"><swe:Quantity gml:id="FirstBinCenter"/></swe:field>
+									<swe:field name="NumberOfBins"><swe:Count gml:id="NumberOfBins"/></swe:field>
+									<swe:field name="BinDistance">
+										<swe:DataArray gml:id="BinDistance">
+											<swe:elementCount ref="NumberOfBins"/><!-- swe:DataArray required reference to swe:Count above -->
+											<swe:elementType name="Bin">
+												<swe:Quantity gml:id="Bin"/>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+								</swe:DataRecord>
+							</swe:elementType>
+						</swe:DataArray>
+					</swe:field>
+				</swe:DataRecord>
+			</swe:elementType>
+		</swe:DataArray>
+	</swe:field>
+</swe:DataRecord>

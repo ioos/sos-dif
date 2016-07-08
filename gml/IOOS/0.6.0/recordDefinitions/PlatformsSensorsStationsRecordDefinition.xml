@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<swe:DataRecord 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:gml="http://www.opengis.net/gml/3.2" 
+xmlns:swe="http://www.opengis.net/swe/1.0.2" 
+xmlns:ioos="http://www.noaa.gov/ioos/0.6.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.opengis.net/swe/1.0.2 ../../../OGC/sweCommon/1.0.2/swe.xsd" 
+gml:id="PlatformsSensorsStationsRecordDefinition">
+	<swe:field name="NumberOfPlatforms">
+		<swe:Count gml:id="NumberOfPlatforms"/>
+	</swe:field>
+	<swe:field name="PlatformArray">
+		<swe:DataArray gml:id="PlatformArray">
+			<swe:elementCount ref="NumberOfPlatforms"/>
+			<swe:elementType name="PlatformSensorsStations">
+				<swe:DataRecord gml:id="PlatformSensorsStations">
+					<swe:field name="Platform">
+						<swe:DataRecord gml:id="Platform">
+							<swe:field name="Organization"><swe:Text gml:id="Organization"/></swe:field>
+							<swe:field name="PlatformId"><swe:Text gml:id="PlatformId"/></swe:field>
+							<swe:field name="Draft"><swe:Quantity gml:id="Draft"/></swe:field>
+							<swe:field name="Range"><swe:Quantity gml:id="Range"/></swe:field>
+							<swe:field name="Speed"><swe:Quantity gml:id="Speed"/></swe:field>
+							<swe:field name="DeployStartDate"><swe:Time gml:id="DeployStartDate"/></swe:field>
+							<swe:field name="DeployEndDate"><swe:Time gml:id="DeployEndDate"/></swe:field>
+						</swe:DataRecord>
+					</swe:field>
+					<swe:field name="NumberOfSensors">
+						<swe:Count gml:id="NumberOfSensors"/>
+					</swe:field>
+					<swe:field name="PlatformSensorArray">
+						<swe:DataArray gml:id="PlatformSensorArray">
+							<swe:elementCount ref="NumberOfSensors"/>
+							<swe:elementType name="Sensor">
+								<swe:DataRecord gml:id="StationSensorInfo">
+									<swe:field name="SensorId"><swe:Text gml:id="SensorId"/></swe:field>
+									<swe:field name="SensorModel"><swe:Text gml:id="SensorModel"/></swe:field>
+									<swe:field name="SensorNumberOfBeams"><swe:Text gml:id="SensorNumberOfBeams"/></swe:field>
+									<swe:field name="Orientation"><swe:Text gml:id="Orientation"/></swe:field>
+									<swe:field name="BlankingDistance"><swe:Quantity gml:id="BlankingDistance"/></swe:field>
+									<swe:field name="HeightFromBottom"><swe:Quantity gml:id="HeightFromBottom"/></swe:field>
+									<swe:field name="SensorDepth"><swe:Quantity gml:id="SensorDepth"/></swe:field>
+									<swe:field name="SamplingRate"><swe:Count gml:id="SamplingRate"/></swe:field>
+									<swe:field name="ReportingInterval"><swe:Count gml:id="ReportingInterval"/></swe:field>
+									<swe:field name="ProcessingLevel"><swe:Text gml:id="ProcessingLevel"/></swe:field>
+									<swe:field name="BinSize"><swe:Quantity gml:id="BinSize"/></swe:field>
+									<swe:field name="FirstBinCenter"><swe:Quantity gml:id="FirstBinCenter"/></swe:field>
+									<swe:field name="RealTimeBinNumber"><swe:Count gml:id="RealTimeBinNumber"/></swe:field>
+									<swe:field name="NumberOfBins"><swe:Count gml:id="NumberOfBins"/></swe:field>
+									<swe:field name="BinDistance">
+										<swe:DataArray gml:id="BinDistance">
+											<swe:elementCount ref="NumberOfBins"/>
+											<swe:elementType name="Bin">
+												<swe:Quantity gml:id="Bin"/>
+											</swe:elementType>
+										</swe:DataArray>
+									</swe:field>
+								</swe:DataRecord>
+							</swe:elementType>
+						</swe:DataArray>
+					</swe:field>
+					<swe:field name="NumberOfPlannedStations">
+						<swe:Count gml:id="NumberOfPlannedStations"/> 
+						<!-- Note:  this count could be 0 and the following array empty if there is no float plan or flight plan for the platform, as might be the case for a drifter. -->
+					</swe:field>
+					<swe:field name="PlannedStationArray">
+						<swe:DataArray gml:id="PlannedStationArray">
+							<swe:elementCount ref="NumberOfPlannedStations"/>
+							<swe:elementType name="PlannedStation">
+								<swe:DataRecord gml:id="PlannedStationInfo">
+									<swe:field name="PlannedStationLatLon"><swe:Position gml:id="PlannedStationLatLon"/></swe:field>
+								</swe:DataRecord>
+							</swe:elementType>
+						</swe:DataArray>
+					</swe:field>
+				</swe:DataRecord>
+			</swe:elementType>
+		</swe:DataArray>
+	</swe:field>
+</swe:DataRecord>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<swe:DataRecord gml:id="TM7c" 
+xmlns:swe="http://www.opengis.net/swe/1.0.2" 
+xmlns:gml="http://www.opengis.net/gml/3.2" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xsi:schemaLocation="http://www.opengis.net/swe/1.0.2  ../../../sweCommon/1.0.2/swe.xsd">
+	<swe:field name="TMBand1">
+		<swe:Quantity definition="urn:ogc:def:phenomenon:OGC:TMBand1" gml:id="RequiredInGML3.2.1">
+			<swe:uom xlink:href="urn:ogc:def:uom:OGC:count"/>
+			<swe:constraint>
+				<swe:AllowedValues id="SINGLE_BYTE">
+					<swe:interval>0 255</swe:interval>
+				</swe:AllowedValues>
+			</swe:constraint>
+		</swe:Quantity>
+	</swe:field>
+	<swe:field name="TMBand2">
+		<swe:Quantity definition="urn:ogc:def:phenomenon:OGC:TMBand2" gml:id="Required2InGML3.2.1">
+			<swe:uom xlink:href="urn:ogc:def:uom:OGC:count"/>
+			<swe:constraint xlink:href="#SINGLE_BYTE"/>
+		</swe:Quantity>
+	</swe:field>
+	<swe:field name="TMBand3">
+		<swe:Quantity definition="urn:ogc:def:phenomenon:OGC:TMBand3" gml:id="Required3InGML3.2.1">
+			<swe:uom xlink:href="urn:ogc:def:uom:OGC:count"/>
+			<swe:constraint xlink:href="#SINGLE_BYTE"/>
+		</swe:Quantity>
+	</swe:field>
+	<swe:field name="TMBand4">
+		<swe:Quantity definition="urn:ogc:def:phenomenon:OGC:TMBand4" gml:id="Required4InGML3.2.1">
+			<swe:uom xlink:href="urn:ogc:def:uom:OGC:count"/>
+			<swe:constraint xlink:href="#SINGLE_BYTE"/>
+		</swe:Quantity>
+	</swe:field>
+	<swe:field name="TMBand5">
+		<swe:Quantity definition="urn:ogc:def:phenomenon:OGC:TMBand5" gml:id="Required5InGML3.2.1">
+			<swe:uom xlink:href="urn:ogc:def:uom:OGC:count"/>
+			<swe:constraint xlink:href="#SINGLE_BYTE"/>
+		</swe:Quantity>
+	</swe:field>
+	<swe:field name="TMBand6">
+		<swe:Quantity definition="urn:ogc:def:phenomenon:OGC:TMBand6" gml:id="Required6InGML3.2.1">
+			<swe:uom xlink:href="urn:ogc:def:uom:OGC:count"/>
+			<swe:constraint xlink:href="#SINGLE_BYTE"/>
+		</swe:Quantity>
+	</swe:field>
+	<swe:field name="TMBand7">
+		<swe:Quantity definition="urn:ogc:def:phenomenon:OGC:TMBand7" gml:id="Required7InGML3.2.1">
+			<swe:uom xlink:href="urn:ogc:def:uom:OGC:count"/>
+			<swe:constraint xlink:href="#SINGLE_BYTE"/>
+		</swe:Quantity>
+	</swe:field>
+</swe:DataRecord>

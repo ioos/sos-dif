@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:Dictionary gml:id="PhenomenaDictionary0.6.1" 
+xmlns:xlink="http://www.w3.org/1999/xlink"
+xmlns:gml="http://www.opengis.net/gml/3.2" 
+xmlns:swe="http://www.opengis.net/swe/1.0.2" 
+xmlns:ioos="http://www.noaa.gov/ioos/0.6.1" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.opengis.net/swe/1.0.2  ../../../OGC/sweCommon/1.0.2/phenomenon.xsd http://www.opengis.net/gml/3.2  ../../../OGC/gml/3.2.1/gml.xsd" 
+ >
+	<gml:description>Dictionary of IOOS observed property phenomena. </gml:description>
+	<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">PhenomenaDictionary</gml:identifier>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WaterTemperature">
+			<gml:description>Temperature of the water.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WaterTemperature</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="Salinity">
+			<gml:description>Salinity of the water.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Salinity</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WaterLevel">
+			<gml:description>Level of the water.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WaterLevel</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="CurrentDirection">
+			<gml:description>Water current destination direction.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">CurrentDirection</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="CurrentSpeed">
+			<gml:description>Water current speed.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">CurrentSpeed</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:CompositePhenomenon gml:id="Currents" dimension="2">
+			<gml:description>Water current destination direction and speed.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Currents</gml:identifier>
+			<swe:component xlink:href="#CurrentDirection"/>
+			<swe:component xlink:href="#CurrentSpeed"/>
+		</swe:CompositePhenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WindDirection">
+			<gml:description>Wind origin direction.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WindDirection</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WindSpeed">
+			<gml:description>Speed of horizontal air movement.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WindSpeed</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WindVerticalVelocity">
+			<gml:description>Speed of vertical air movement; positive values up, negative ones down.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WindVerticalVelocity</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:CompositePhenomenon gml:id="MinimumWinds" dimension="3">
+			<gml:description>Wind speed and origin direction.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">MinimumWinds</gml:identifier>
+			<swe:component xlink:href="#WindSpeed"/>
+			<swe:component xlink:href="#WindDirection"/>
+			<swe:component xlink:href="#WindVerticalVelocity"/>
+		</swe:CompositePhenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WindGust">
+			<gml:description>Maximum momemtary speed of air movement.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WindGust</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:CompositePhenomenon gml:id="Winds" dimension="4">
+			<gml:description>Wind origin direction and speed.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Winds</gml:identifier>
+			<swe:base xlink:href="#MinimumWinds"/>
+			<swe:component xlink:href="#WindGust"/>
+		</swe:CompositePhenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="SignificantWaveHeight">
+			<gml:description>Significant wave height.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SignificantWaveHeight</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="DominantWavePeriod">
+			<gml:description>Dominant wave period.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">DominantWavePeriod</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="AverageWavePeriod">
+			<gml:description>Average wave period.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">AverageWavePeriod</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="SwellHeight">
+			<gml:description>Swell height.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SwellHeight</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="SwellPeriod">
+			<gml:description>Swell period.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SwellPeriod</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WindWaveHeight">
+			<gml:description>Wind Wave height.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WindWaveHeight</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WindWavePeriod">
+			<gml:description>Wind Wave period.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WindWavePeriod</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WaveDuration">
+			<gml:description>Wave duration</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WaveDuration</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="CalculationMethod">
+			<gml:description>Calculation method.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">CalculationMethod</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="SamplingRate">
+			<gml:description>Sampling rate.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SamplingRate</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="NumberOfFrequencies">
+			<gml:description>Number Of Frequencies</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">NumberOfFrequencies</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="CenterFrequency">
+			<gml:description>Center Frequency</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">CenterFrequency</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="Bandwidth">
+			<gml:description>Bandwidth</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Bandwidth</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="SpectralEnergy">
+			<gml:description>Spectral energy.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SpectralEnergy</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="MeanWaveDirection">
+			<gml:description>Mean wave direction.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">MeanWaveDirection</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="SwellWaveDirection">
+			<gml:description>Swell wave direction.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SwellWaveDirection</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="WindWaveDirection">
+			<gml:description>Wind wave direction.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">WindWaveDirection</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="DirectionalWaveParameter">
+			<gml:description>Directional Wave Parameter.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">DirectionalWaveParameter</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="FourierCoefficientA1">
+			<gml:description>First Fourier Coefficient.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">FourierCoefficientA1</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="FourierCoefficientA2">
+			<gml:description>Second Fourier Coefficient.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">FourierCoefficientA2</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="FourierCoefficientB1">
+			<gml:description>Third Fourier Coefficient.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">FourierCoefficientB1</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:Phenomenon gml:id="FourierCoefficientB2">
+			<gml:description>Fourth Fourier Coefficient.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">FourierCoefficientB2</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:CompositePhenomenon gml:id="NonDirectionalWaves" dimension="18">
+			<gml:description>Wave measurements.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Waves</gml:identifier>
+			<swe:component xlink:href="#SignificantWaveHeight"/>
+			<swe:component xlink:href="#DominantWavePeriod"/>
+			<swe:component xlink:href="#AverageWavePeriod"/>			
+			<swe:component xlink:href="#SwellHeight"/>
+			<swe:component xlink:href="#SwellPeriod"/>
+			<swe:component xlink:href="#WindWaveHeight"/>
+			<swe:component xlink:href="#WindWavePeriod"/>
+			<swe:component xlink:href="#WaterTemperature"/>
+			<swe:component xlink:href="#WaveDuration"/>
+			<swe:component xlink:href="#CalculationMethod"/>
+			<swe:component xlink:href="#SamplingRate"/>
+			<swe:component xlink:href="#NumberOfFrequencies"/>
+			<swe:component xlink:href="#CentralFrequency"/>
+			<swe:component xlink:href="#Bandwidth"/>
+			<swe:component xlink:href="#SpectralEnergy"/>
+		</swe:CompositePhenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:CompositePhenomenon gml:id="Waves" dimension="26">
+			<gml:description>Directional waves</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Waves</gml:identifier>
+			<swe:base xlink:href="#NonDirectionalWinds"/>
+			<swe:component xlink:href="#MeanWaveDirection"/>
+			<swe:component xlink:href="#SwellWaveDirection"/>
+			<swe:component xlink:href="#WindWaveDirection"/>
+			<swe:component xlink:href="#DirectionalWaveParameter"/>
+			<swe:component xlink:href="#FourierCoefficientA1"/>
+			<swe:component xlink:href="#FourierCoefficientA2"/>
+			<swe:component xlink:href="#FourierCoefficientB1"/>
+			<swe:component xlink:href="#FourierCoefficientB2"/>
+		</swe:CompositePhenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember >
+		<swe:CompositePhenomenon gml:id="MultiPhenomenaObservation" dimension="36">
+			<gml:description>Multiple phenomena observation.</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">MultiPhenomenaObservation</gml:identifier>
+			<swe:component xlink:href="#WaterTemperature"/>
+			<swe:component xlink:href="#Salinity"/>
+			<swe:component xlink:href="#WaterLevel"/>
+			<swe:component xlink:href="#Winds"/>
+			<swe:component xlink:href="#Currents"/>
+			<swe:component xlink:href="#Waves"/>
+		</swe:CompositePhenomenon>
+	</gml:definitionMember>
+	<!-- The following definitions are not really of phenomenon, but of the observation, instruments, and procedure associated with estimates of phenomenon values specified in abstractDataContent.031108.doc.  However, such information is often recorded with actual phenomena data, and so is included here. -->
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="GMLID">
+			<gml:description>GML identifier of type XML ID required on all GML objects.</gml:description>
+			<gml:identifier codeSpace="urn:ogc:specification:gml:id">GMLID</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="StationName">
+			<gml:description>Station Name</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">StationName</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="Organization">
+			<gml:description>Organization Name</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Organization</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="Platform">
+			<gml:description>Sensor Platform</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Platform</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="Device">
+			<gml:description>Sensor Device</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Device</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="SampleInterval">
+			<gml:description>Sampling Interval</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SampleInterval</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="ProcessingLevel">
+			<gml:description>ProcessingLevel</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">ProcessingLevel</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="ObservedProperty">
+			<gml:description>ObservedProperty</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">ObservedProperty</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="SamplingPoint">
+			<gml:description>SamplingPoint</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SamplingPoint</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="VerticalPosition">
+			<gml:description>VerticalPosition</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">VerticalPosition</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="VerticalDatum">
+			<gml:description>VerticalDatum</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">VerticalDatum</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="SamplingDateTime">
+			<gml:description>SamplingDateTime</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SamplingDateTime</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="UnitOfMeasure">
+			<gml:description>UnitOfMeasure</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">UnitOfMeasure</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="TotalWaterDepth">
+			<gml:description>TotalWaterDepth</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">TotalWaterDepth</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="DeployStartDate">
+			<gml:description>DeployStartDate</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">DeployStartDate</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="DeployEndDate">
+			<gml:description>DeployEndDate</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">DeployEndDate</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="SensorId">
+			<gml:description>SensorId</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SensorId</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="SensorModel">
+			<gml:description>SensorModel</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SensorModel</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="SensorNumberOfBeams">
+			<gml:description>SensorNumberOfBeams</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SensorNumberOfBeams</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="Orientation">
+			<gml:description>Orientation</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Orientation</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="BlankingDistance">
+			<gml:description>BlankingDistance</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">BlankingDistance</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="HeightFromBottom">
+			<gml:description>HeightFromBottom</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">HeightFromBottom</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="SensorDepth">
+			<gml:description>SensorDepth</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">SensorDepth</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="ReportingInterval">
+			<gml:description>ReportingInterval</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">ReportingInterval</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="BinSize">
+			<gml:description>BinSize</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">BinSize</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="FirstBinCenter">
+			<gml:description>FirstBinCenter</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">FirstBinCenter</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="RealTimeBinNumber">
+			<gml:description>RealTimeBinNumber</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">RealTimeBinNumber</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="Heading">
+			<gml:description>Heading</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Heading</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="Pitch">
+			<gml:description>Pitch</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Pitch</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+	<gml:definitionMember>
+		<swe:Phenomenon gml:id="Roll">
+			<gml:description>Roll</gml:description>
+			<gml:identifier codeSpace="urn:x-noaa:ioos:def:phenomenonNames">Roll</gml:identifier>
+		</swe:Phenomenon>
+	</gml:definitionMember>
+</gml:Dictionary>

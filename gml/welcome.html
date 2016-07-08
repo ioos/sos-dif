@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="keywords" content="Ocean Observation Service, ocean, coast, great lakes, NOAA, National Oceanic and Atmospheric Administration, sea, integrated, safety, economy, protect, environment, data, catalog, management, communications, regional partners, interagency programs, global observations" />
+	<meta name="DC.title" content="Home page of IOOS, Integrated Oceans observation System" />
+	<meta name="DC.description" content="Providing the data and information needed to improve safety, enhance our economy, and protect our environment. The Integrated Ocean Observing System (IOOS) is a federal, regional, and private-sector partnership working to enhance our ability to collect, deliver, and use ocean information. IOOS delivers the data and information needed to increase understanding of our oceans and coasts, so decision makers can take action to improve safety, enhance the economy, and protect the environment." />
+	<meta name="DC.creator" content="US Department of Commerce, National Oceanic and Atmospheric Administration" />
+	<meta name="DC.date.created" scheme="ISO8601" content="2003-03-19" />
+	<meta name="DC.date.reviewed" scheme="ISO8601" content="2010-08-28" />
+	<meta name="DC.language" scheme="DCTERMS.RFC1766" content="EN-US" />
+
+<title>NOAA IOOS Data Integration Framework</title>
+
+	<link rel="stylesheet" type="text/css" href="/css/ioos.css" media="all" />
+    <link rel="stylesheet" href="/css/coin-slider-styles.css" type="text/css" />
+   <link rel="stylesheet" type="text/css" href="/css/print.css" media="print" />
+</head>
+<body>
+
+<div id="wrapper">
+	<div id="header"><!--#include virtual="/includes/header.html" --></div><!-- header end -->
+
+   			<div style="height:2670px" class="col1">
+    <div id="breadcrumb"><a href="../welcome.html">HOME</a> | <A href="/data/welcome.html">Data</A> | <a href="/data/dmac/welcome.html">Data Management and Communications</a> | <a href="/dif/">Data Integration Framework (DIF)</a> |  Software Disclaimer</div>
+			<p>&nbsp;</p>
+            <h1>NOAA IOOS Data Integration Framework</h1>
+            <p>&nbsp;</p>
+<p>The NOAA IOOS program initiated development of a Data  Integration Framework  (DIF) to  improve management and delivery of an initial subset of ocean  observations. The DIF will establish the  technical infrastructure, standards, and protocols needed to improve delivery  of atleast six of <a href="http://www.csc.noaa.gov/cir/files/Core.Variables.from.IOOSPlan_FIN_low-res%2033.pdf" target="_blank">20 IOOS core oceanographic variables</a> defined in the U.S. IOOS Development Plan, as well as winds. <a href="/ioos_in_action/overview.html"><em style="font-size:10px">Read More</em></a></p>
+<p>&nbsp;</p>
+
+<ul id="list"><h4><a name="dataaccess">Data Access</a></h4>
+The following services are the first to be established by the NOAA IOOS program and its partners to provide access to data.
+	<li> <a href="http://sdf.ndbc.noaa.gov/sos/" target="_blank">NDBC Sensor Observation Service (SOS)</a> This server provides in-situ temperature, salinity, currents, water level, waves and winds data
+from National Data Buoy Center (NDBC) moorings, IOOS Regional Coastal Ocean Observing Systems, Deep-ocean Assessment and
+Reporting of Tsunamis (DART) buoys, and Tropical Atmosphere Ocean (TAO) buoys. The server is
+operated by the NOAA National Weather Service (NWS) NDBC. SOS is an Open Geospatial Consortium (OGC) standard. </li>
+	<li> <a href="http://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/" target="_blank">CO-OPS SOS</a> This server provides in-situ temperature, conductivity, currents, water level, and waves data
+from the National Water Level Observing Network (NWLON) and the Physical Oceanographic Real-Time
+System (PORTS). The server is operated by the NOAA National Ocean Service (NOS) Center for
+Operational Oceanographic Products and Services (CO-OPS).</li>
+	<li> <a href="http://sdf.ndbc.noaa.gov/wcs/" target="_blank">NDBC THREDDS Data Server (TDS)</a> &nbsp;This server provides gridded surface currents derived from high-frequency radar (HFR) installations
+along the coasts. The server supports Web Coverage Service (WCS) and  Open-source Project for a Network Data Access Protocol (OpenDAP) and is operated by NDBC. WCS is an OGC standard.</li>
+	<li><a href="http://neptune.baruch.sc.edu/xenia/sos/difSOS.html" target="_blank">SECOORA SOS</a> This server provides a variety of in-situ parameters from a collection   of data providers.&nbsp; Server is operated by SECOORA (Southeast Coastal   Ocean Observing Regional Association). Software documentation on   creating this service from the supporting database is at <a href="http://code.google.com/p/xenia/wiki/XeniaSOS" target="_blank">http://code.google.com/p/xenia/wiki/XeniaSOS</a></li>
+	<li><u>CoastWatch TDS (coming soon!)</u> This server will provide access to chlorophyll concentrations derived from satellite ocean color observations.
+(Expected November 2008). This server is operated by NOAA National Environmental Satellite, Data, and Information Service (NESDIS) CoastWatch program.</li>
+</ul>
+
+<p>&nbsp;</p>
+							
+<ul id="list"><h4><a name="technicaldoc">Technical Documentation</a></h4>
+	<li><a href="/library/dif_overview_102908.pdf" target="_blank">IOOS DIF Draft Architecture & Recommendations</a> This set of slides includes a partial set of architecture
+diagrams and provides an overview of the data access services used
+by the DIF.</li>
+	<li><strong>XML Encoding:</strong> <a href="../gml/schema.html">IOOS DIF XML Schema beta v0.6.1</a> - This Geography Markup Language (GML)
+application schema defines the XML encoding used by the NDBC and CO-OPS SOS to
+serve in situ data.  This encoding is designed to be complete
+and machine-readable, and may be transformed to simplified representations
+using code such as the Extensible Styleheet Language Transformation (XSLT) example below.</li>
+	<li><strong>Text encoding:</strong> IOOS conventions for <a href="/library/ioos_conventions_for_csv_encoding_v100c.pdf" target="_blank">comma-separated value (CSV)</a> (PDF, 84kB) and <a href="/library/ioos_conventions_for_tsv_encoding_v100c.pdf" target="_blank">tab-separated value (TSV)</a> (PDF, 95kB) encoding. CSV and TSV are offered by the NDBC SOS and eventually by other IOOS SOS.
+The CSV is directly readable by common spreadsheet programs. The TSV includes a few specialized column headers to make it more easily readable by the <a target="_blank" href="http://oceanservice.noaa.gov/cgi-bin/redirout.cgi?url=http://odv.awi.de/">Ocean Data View (ODV)</a> software package.
+	</li><li><a href="/library/difdesigndoc_v1_0_a82eb8.pdf" target="_blank">DIF Design Document:</a><span id="caption">(pdf, 1,039kb)</span> This document defines the high-level DIF architecture, standards,
+conventions, and services to be employed, intersections with NOAA Enterprise
+Architecture, and risks and mitigation strategies.</li> 
+</ul>
+
+<p>&nbsp;</p>
+
+<ul id="list"><h4><a name="software">Software</a></h4>
+The following software is provided on an as-is basis with no support or warranty. Read the
+<a href="/disclaimer.html">full disclaimer</a> before downloading.<br /><br />
+	<ul id="list"><h4>Server Code</h4>
+		<li><a href="http://sdf.ndbc.noaa.gov/sos/software_revisions.shtml" target="_blank">NDBC SOS software - version 1</a>: This software was developed by the National Data Buoy Center (NDBC) to provide a SOS interface to their MySQL database back-end. Offers data in GML, CSV, TSV and KML encodings.</li>
+		<li><a href="/library/sos_server_ex.zip" target="_blank">GCOOS SOS software beta version 0.6.1</a><span id="caption">(zip, 88kb)</span>This PHP script was modified from the NDBC version to support SQLite database engine. This <strong>beta</strong> software is still under active development and test.</li>
+		<li> <a href="http://www.unidata.ucar.edu/projects/THREDDS/tech/TDS.html" target="_blank">THREDDS Data Server (TDS)</a> is open-source software from Unidata that provides OpenDAP and WCS functionality. It is used by the NDBC and CoastWatch.</li>
+	</ul>
+	<ul id="list"><h4>Format Converters</h4>
+		<li><a href="/library/ioos_gmlv061_to_csv.xsl" title="IOOS SOS to CSV v0.6.1">IOOS SOS to CSV v0.6.1</a>This XSLT file converts the IOOS SOS v0.6.1 observation values from GML to comma-separated value (CSV) format suitable for use by Excel and other simple applications.</li>
+		<li> <a href="/library/netcdf2bufr.zip" target="_blank">netCDF to BUFR converter beta v0.1</a> This sample application was developed at AOML. It converts data from a netCDF format accepted by DIF to the Binary Universal Form for the Representation of meteorological data (BUFR) format maintained by the World Meteorological Organization (WMO). The archive contains C source code, descriptor file, and brief help on compilation and execution.</li>
+	</ul>
+	<ul id="list"><h4>Other Tools</h4>
+		<li><a href="../ioos_in_action/ioos_tcl.html" target="_blank">Tcl/Tk Example</a> These Tcl/Tk routines are used by the Coastal Inundation customer for retrieving water level observations from the CO-OPS SOS.</li>
+	</ul>
+</ul>
+						
+<p>&nbsp;</p>
+
+<ul id="list"><h4><a name="standards">Core DIF Standards</a></h4>
+These are some of the basic standards and specifications adopted by the NOAA IOOS Data Integration Framework.
+	<li><a href="http://www.opengeospatial.org/standards/sos" target="_blank">OGC Sensor Observation Service (SOS) specification</a>							NOAA IOOS uses this service type to provide access to in-situ oceanographic data
+in an XML encoding defined by the GML application schema referenced above.</li>
+	<li><a href="http://www.opengeospatial.org/standards/wcs" target="_blank">OGC Web Coverage Service (WCS) specification</a> NOAA IOOS uses this service type to provide access to gridded remotely sensed
+data in binary formats such as NetCDF and GeoTIFF.</li>
+	<li><a href="http://www.opendap.org/" target="_blank">OPeNDAP information</a> This service type is used by NOAA IOOS to provide access to gridded remotely sensed
+data in binary formats such as NetCDF and GeoTIFF.</li>
+	<li><a href="http://www.opengeospatial.org/standards/wms" target="_blank">OGC Web Map Service (WMS) specification</a>						  This  service type will be used to provide georeferenced images of data.</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<ul id="list"><h4><a name="projdocs">Project Documents</a></h4>
+	<li><a href="/library/dif_national_workshop_040709.pdf" target="_blank">IOOS REGIONAL DATA INTEGRATION FRAMEWORK
+IMPLEMENTATION WORKSHOP:</a><span id="caption">(pdf, 13mb)</span>The Integrated Ocean Observing System (IOOS) Regional Data Integration Framework
+(DIF) Implementation Workshop was organized with the goal of improving the overall production and execution of IOOS data management across the eleven IOOS Regions. To
+accomplish the goal of DIF implementation, a set of objectives were developed in the workshop planning process.</li>
+	<li>The NOAA IOOS Data Integration Framework: Initial Implementation Report:<a href="/library/oceans_20080917.pdf" target="_blank">Slides</a> (pdf, 315kb) and associated <a href="/library/oceans2008quebec.pdf" target="_blank">paper</a> (pdf, 125kb)
+presented at MTS/IEEE Oceans 2008 conference in Quebec, Canada 2008-09-17.</li>
+	<li><a href="/library/dif_project_plan_112007.pdf" target="_blank">Project Plan:</a><span id="caption">(pdf, 168kb)</span>The Project Plan records planning ideas and agreement details, approved scope, cost, and schedule baselines.</li>
+	<li><a href="/library/difrequirements_112007.pdf" target="_blank">Functional Requirements:</a><span id="caption">(pdf, 333kb)</span>This document defines the functional requirements of the DIF and is a guide to further  system documentation and design.</li>
+	<li><a href="/library/ioos_dif_conops_v1.0.pdf" target="_blank">Concept of Operations:</a><span id="caption">(pdf, 410kb)</span>The Concept of Operations (ConOps) document is the translation of the DIF functional requirements into operational scenarios. The ConOps provides important input into the high-level system design.</li>
+	<li><a href="/library/ioos_dpap_v1_1.pdf" target="_blank">DIF Customer Implementation Project Summary and Performance Assessment Plan:</a><span id="caption">(pdf, 457kb)</span> This document
+describes the 4 customer implementation projects used to assess the value of DIF's integrated data.  Provides overview of benchmarks, metrics, and
+performance assessment methodology.</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<ul id="list"><h4><a name="dataManComdocs">Data Management and Communications Documents</a></h4>
+	<li><a href="/library/noaa_hlrd_v1_5_01_13_09.pdf" target="_blank">IOOS High Level Functional Requirements</a>: (pdf, 168kb) As a part of the IOOS implementation planning effort, the NOAA IOOS Program collected functional requirements from a variety of existing sources and compiled them into this single document. This IOOS High-Level Functional Requirements Document will be used to assist developing more detailed documents as the program focuses its efforts in developing and deploying a National DMAC to serve all IOOS stakeholders.</li>
+	<li><a href="/library/dmac_cops_v1_5_01_09_09.pdf" target="_blank">IOOS DMAC Concept of Operations</a>: (pdf, 168kb) This document describes the initial high-level concept of operations (ConOps) for the DMAC subsystem; it is not intended to be an implementation or transition plan. The focus of the document is to define the functions and services that IOOS stakeholders desire the DMAC to perform. It does not address the technology or architecture of how it will perform those functions and services. NOAA is currently running a pilot project, the Data Integration Framework (DIF), to address some of the DMAC functionality and some of the technology issues.</li>
+</ul>
+<p>&nbsp;</p>
+<p style="position: absolute; bottom: 20px; width:88%; text-align: left">[ <a href="#top">top</a> ]</p>
+<!-- Column 2 end -->
+		</div>
+	<div id="footer"><!--#include virtual="/includes/footer.html" --></div>
+</div><!-- wrapper end -->
+
+
+
+</body>
+</html>
